@@ -1,8 +1,5 @@
 const API_CONFIG = {
-  BASE_URL: process.env.REACT_APP_API_URL,
-  // BASE_URL: 'http://192.168.1.19:8080',
-  // BASE_URL: 'http://192.168.2.209:8080',
-  // Timeout request (ms)
+  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:8000',
   TIMEOUT: 600000,
   HEADERS: {
     'Content-Type': 'application/json',
@@ -10,34 +7,32 @@ const API_CONFIG = {
   }
 };
 
-// Auth Configuration
 const AUTH_CONFIG = {
-  // Key lưu token trong localStorage
-  TOKEN_KEY: 'pet_food_token',
-  // Key lưu thông tin user trong localStorage
-  USER_KEY: 'pet_food_user',
-  // Thời gian hết hạn token (ms) - 30 ngày
+  TOKEN_KEY: 'vlxd_token',
+  USER_KEY: 'vlxd_user',
   TOKEN_EXPIRATION: 30 * 24 * 60 * 60 * 1000
 };
 
 // App Configuration
 const APP_CONFIG = {
-  // Tên ứng dụng
-  APP_NAME: 'Shop Thú Cưng',
-  // Mặc định số sản phẩm mỗi trang
+  APP_NAME: 'Hệ thống Quản lý VLXD',
   DEFAULT_PAGE_SIZE: 10,
-  // Các loại sản phẩm
+
+  // Các loại sản phẩm VLXD (Khớp với dữ liệu bạn sẽ nhập)
   PRODUCT_CATEGORIES: [
-    { value: 'dog', label: 'Thức ăn cho chó' },
-    { value: 'cat', label: 'Thức ăn cho mèo' },
-    // { value: 'spa', label: 'Spa (Chăm sóc thú cưng)' }
+    { value: 'cat_san_lap', label: 'Cát xây dựng / Cát san lấp' },
+    { value: 'da_xay_dung', label: 'Đá xây dựng (1x2, 4x6, mi...)' },
+    { value: 'xi_mang', label: 'Xi măng' },
+    { value: 'sat_thep', label: 'Sắt thép các loại' },
+    { value: 'gach_ngoi', label: 'Gạch, ngói' },
+    { value: 'khac', label: 'Vật liệu khác' }
   ],
-  // Trạng thái đơn hàng
+
+  // Trạng thái đơn hàng (Khớp chính xác với model Order trong FastAPI)
   ORDER_STATUSES: [
-    { value: 'Đã đặt hàng', label: 'Đã đặt hàng' },
-    { value: 'Đang xử lý', label: 'Đang xử lý' },
-    { value: 'Đang giao hàng', label: 'Đang giao hàng' },
-    { value: 'Đã giao hàng', label: 'Đã giao hàng' },
+    { value: 'Chờ duyệt', label: 'Chờ duyệt' },
+    { value: 'Đang giao', label: 'Đang giao' },
+    { value: 'Hoàn thành', label: 'Hoàn thành' },
     { value: 'Đã hủy', label: 'Đã hủy' }
   ]
 };

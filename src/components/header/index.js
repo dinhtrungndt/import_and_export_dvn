@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaBars, FaUser, FaSearch, FaTimes, FaSignOutAlt, FaShoppingBag, FaClipboardList, FaChartLine } from 'react-icons/fa';
-import { useAuth } from '../../contexts/AuthContext';
-import { SideBar } from '../sidebar';
-import { fetchProducts } from '../../stores/redux/actions/adminActions.js';
+import { useEffect, useState } from 'react';
+import { FaBars, FaChartLine, FaClipboardList, FaSearch, FaShoppingBag, FaSignOutAlt, FaTimes, FaUser } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { fetchProducts } from '../../stores/redux/actions/adminActions.js';
+import { SideBar } from '../sidebar';
 
 export const HeaderPage = () => {
   const dispatch = useDispatch();
@@ -52,29 +52,29 @@ export const HeaderPage = () => {
     const path = location.pathname;
 
     if (path === '/') return 'Trang Chủ';
-    if (path === '/products') return 'Sản Phẩm';
-    if (path.startsWith('/product/')) return 'Chi Tiết Sản Phẩm';
+    if (path === '/products') return 'Báo Giá Vật Liệu';
+    if (path.startsWith('/product/')) return 'Chi Tiết Vật Liệu';
     if (path === '/order-history') return 'Lịch Sử Đơn Hàng';
     if (path === '/account') return 'Tài Khoản';
     if (path === '/contact') return 'Liên Hệ';
 
     // Admin routes
     if (path.startsWith('/admin')) {
-      if (path === '/admin') return 'Quản Trị';
-      if (path === '/admin/inventory') return 'Quản Lý Kho';
+      if (path === '/admin') return 'Tổng Quan (Dashboard)';
+      if (path === '/admin/inventory') return 'Quản Lý Tồn Kho';
       if (path === '/admin/export') return 'Báo Cáo Xuất Kho';
       if (path === '/admin/revenue') return 'Báo Cáo Doanh Thu';
       if (path === '/admin/expense-report') return 'Báo Cáo Chi Phí';
-      if (path === '/admin/list-products') return 'Sản phẩm';
-      if (path === '/admin/costs-mana') return 'Chi phí quản lý';
+      if (path === '/admin/list-products') return 'Quản Lý Vật Liệu';
+      if (path === '/admin/costs-mana') return 'Quản Lý Khoản Chi';
     }
 
     // Staff routes
     if (path.startsWith('/staff')) {
-      return 'Quản Lý Kho';
+      return 'Quản Lý Kho (Staff)';
     }
 
-    return 'Trang Chủ';
+    return 'Hệ Thống VLXD';
   };
 
   useEffect(() => {
@@ -129,7 +129,8 @@ export const HeaderPage = () => {
                         <FaClipboardList className="inline mr-2" />
                         Lịch sử đơn hàng
                       </Link>
-                      {hasRole('admin') && (
+                      {/* Cho phép Admin hoặc Manager vào trang quản trị */}
+                      {hasRole(['admin', 'manager']) && (
                         <Link
                           to="/admin"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -139,14 +140,15 @@ export const HeaderPage = () => {
                           Trang quản trị
                         </Link>
                       )}
-                      {hasRole(['admin', 'staff']) && !hasRole('admin') && (
+                      {/* Nhân viên kho (Staff) */}
+                      {hasRole(['staff']) && (
                         <Link
                           to="/staff"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           onClick={() => setIsProfileDropdownOpen(false)}
                         >
                           <FaShoppingBag className="inline mr-2" />
-                          Trang nhân viên
+                          Quản lý kho
                         </Link>
                       )}
                       <button
@@ -186,7 +188,7 @@ export const HeaderPage = () => {
           <form onSubmit={handleSearch} className="flex items-center">
             <input
               type="text"
-              placeholder="Tìm kiếm sản phẩm..."
+              placeholder="Tìm kiếm vật liệu (cát, đá, xi măng)..."
               className="flex-grow border rounded-l py-2 px-3 focus:outline-none"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
