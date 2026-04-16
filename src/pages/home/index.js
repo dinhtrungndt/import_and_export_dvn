@@ -1,148 +1,256 @@
-import { useEffect, useState } from 'react';
-import { FaArrowRight, FaBoxOpen, FaBuilding, FaHardHat, FaSearch, FaTools, FaTruck } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { FaArrowRight, FaHardHat, FaPhoneAlt, FaLeaf, FaBuilding, FaShieldAlt } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchProducts, fetchUserOrders } from '../../stores/redux/actions/adminActions.js';
 
-const HomePage = () => {
-  const dispatch = useDispatch();
+const slideImages = [
+  "https://vlxdmanhtai.com/wp-content/uploads/2022/06/vat-lieu-xay-dung-manh-tai.jpg.webp",
+  "https://vlxdmanhtai.com/wp-content/uploads/2022/06/sat-cuon-xay-dung-vlxd-manh-tai-min.jpg.webp",
+  "https://vlxdmanhtai.com/wp-content/uploads/2022/06/gach-xay-dung-vlxd-manh-tai.jpg.webp",
+  "https://vlxdmanhtai.com/wp-content/uploads/2022/06/cat-xay-dung-vlxd-manh-tai.jpg.webp"
+];
+
+const categoryData = [
+  { name: "Cát đóng bao", img: "https://vlxdmanhtai.com/wp-content/uploads/2022/05/cat-dong-bao-tien-loi-xay-dung.jpg", query: "cat_dong_bao" },
+  { name: "Cát xây dựng", img: "https://vlxdmanhtai.com/wp-content/uploads/2022/05/cat-xay-dung-vlxd-manh-tai.jpg", query: "cat_xay_dung" },
+  { name: "Đá xây dựng", img: "https://vlxdmanhtai.com/wp-content/uploads/2022/05/cac-loai-da-xay-dung-chat-luong-cao-vlxd-manh-tai.jpg", query: "da_xay_dung" },
+  { name: "Gạch Tuynel", img: "https://vlxdmanhtai.com/wp-content/uploads/2022/05/gach-tuynel-vlxd-manh-tai.jpg", query: "gach" },
+  { name: "Sắt thép chuẩn", img: "https://vlxdmanhtai.com/wp-content/uploads/2022/05/sat-thep-xay-dung-vlxd-manh-tai.jpg", query: "sat_thep" },
+  { name: "Dây Kẽm & Đinh", img: "https://vlxdmanhtai.com/wp-content/uploads/2022/05/day-thep-ma-kem-gia-re-vlxd-manh-tai.jpg", query: "day_kem" },
+  { name: "Lưới thép", img: "https://vlxdmanhtai.com/wp-content/uploads/2022/05/luoi-thep-xay-dung-vlxd-manh-tai.jpg", query: "luoi_thep" },
+  { name: "Thép hình", img: "https://vlxdmanhtai.com/wp-content/uploads/2022/05/cac-loai-thep-xay-dung.jpg", query: "thep_hinh" },
+  { name: "Thép hộp", img: "https://vlxdmanhtai.com/wp-content/uploads/2022/05/thep-hop-vuong.jpg", query: "thep_hop" },
+  { name: "Xi măng", img: "https://vlxdmanhtai.com/wp-content/uploads/2022/05/xi-mang-xay-dung-vlxd-manh-tai.jpg", query: "xi_mang" }
+];
+
+const priceHighlights = [
+  {
+    category: "Xi Măng",
+    bg: "bg-gradient-to-r from-blue-700 to-blue-500",
+    items: [
+      { name: "Hà Tiên Đa Dụng", price: "70.000đ", unit: "Bao" },
+      { name: "Insee Sao Mai", price: "72.000đ", unit: "Bao" },
+      { name: "Fico / Nghi Sơn", price: "68.000đ", unit: "Bao" },
+    ]
+  },
+  {
+    category: "Cát Bê Tông - Xây",
+    bg: "bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-900",
+    items: [
+      { name: "Cát Bê Tông Rửa", price: "270.000đ", unit: "Khối" },
+      { name: "Cát Xây Tô Sàng", price: "170.000đ", unit: "Khối" },
+      { name: "Cát San Lấp", price: "140.000đ", unit: "Khối" },
+    ]
+  },
+  {
+    category: "Đá Công Trình",
+    bg: "bg-gradient-to-r from-slate-800 to-slate-600",
+    items: [
+      { name: "Đá 1x2 Xanh Đồng Nai", price: "370.000đ", unit: "Khối" },
+      { name: "Đá 4x6 Đen Bình Điền", price: "320.000đ", unit: "Khối" },
+      { name: "Đá Mi Bụi / Sàng", price: "220.000đ", unit: "Khối" },
+    ]
+  },
+  {
+    category: "Gạch - Sắt",
+    bg: "bg-gradient-to-r from-rose-600 to-red-500",
+    items: [
+      { name: "Gạch Ống Tuynel", price: "1.100đ", unit: "Viên" },
+      { name: "Thép CB300 D10", price: "Liên hệ", unit: "Cây" },
+      { name: "Gạch Không Nung", price: "950đ", unit: "Viên" },
+    ]
+  }
+];
+
+export default function HomePage() {
   const navigate = useNavigate();
-
-  const [categories] = useState([
-    { id: 1, name: 'Cát, Đá xây dựng', icon: <FaBuilding size={32} />, path: '/products?category=cat_san_lap', desc: 'Cát san lấp, cát xây tô, đá 1x2, 4x6 chất lượng chuẩn...' },
-    { id: 2, name: 'Xi măng & Sắt thép', icon: <FaTools size={32} />, path: '/products?category=xi_mang', desc: 'Xi măng Hà Tiên, Insee, Sắt thép Hòa Phát, Pomina...' },
-    { id: 3, name: 'Gạch & Vật tư khác', icon: <FaBoxOpen size={32} />, path: '/products?category=gach_ngoi', desc: 'Gạch ống, gạch đinh, ống nước và các phụ kiện...' },
-  ]);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
-    dispatch(fetchProducts());
-    dispatch(fetchUserOrders());
-  }, [dispatch]);
-
-  const handleCategoryClick = (path) => navigate(path);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const searchQuery = e.target.search.value.trim();
-    if (searchQuery) {
-      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
-    }
-  };
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slideImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div className="pb-16 bg-gray-50 min-h-screen">
-      {/* Hero Section */}
-      <div className="relative bg-blue-700 py-16 lg:py-24 px-4 sm:px-6 lg:px-8 mb-12 overflow-hidden">
-        {/* Decorative background elements cho Desktop */}
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 opacity-10 hidden lg:block">
-          <FaBuilding className="text-[400px] text-white" />
-        </div>
-
-        <div className="relative z-10 text-center max-w-4xl mx-auto">
-          <h1 className="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl lg:text-7xl">
-            <span className="block mb-2">Vật Liệu Xây Dựng</span>
-            <span className="block text-yellow-400">Chất lượng - Uy tín - Giá sỉ</span>
-          </h1>
-          <p className="mt-4 max-w-md mx-auto text-base text-blue-100 sm:text-lg md:mt-6 md:text-xl md:max-w-2xl">
-            Hệ thống phân phối đa dạng các loại vật tư: Cát, đá, xi măng, sắt thép... Đáp ứng mọi nhu cầu thi công từ dân dụng đến dự án lớn.
-          </p>
-          <div className="mt-8 max-w-md mx-auto sm:flex sm:justify-center md:mt-10">
-            <div className="rounded-md shadow">
-              <Link
-                to="/products"
-                className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-bold rounded-lg text-blue-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10 transition-transform hover:scale-105"
-              >
-                Nhận Báo Giá Ngay
+    <div className="font-sans text-slate-800 bg-white selection:bg-blue-600 selection:text-white pb-0">
+      
+      {/* 1. HERO SECTION - Ultra Compact Height */}
+      <section className="relative w-full overflow-hidden bg-white mt-4 pb-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col lg:flex-row items-center gap-6">
+          {/* Left Block */}
+          <div className="w-full lg:w-[45%] xs:text-center lg:text-left">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight mb-3">
+              Xây dựng <br className="hidden sm:block"/>
+              kiến trúc <span className="text-blue-600 inline-block">bền vững</span>
+            </h1>
+            <p className="text-sm text-slate-600 mb-5 max-w-lg mx-auto lg:mx-0 pr-4 leading-relaxed">
+              Đại lý cấp 1 phân phối vật liệu Cát, Đá, Xi măng, Sắt Thép. Năng lực cung ứng linh hoạt cho mọi dự án lớn nhỏ toàn TP.HCM và lân cận.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
+              <Link to="/products" className="w-full sm:w-auto text-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm text-sm">
+                Catalog Kèm Giá
               </Link>
+              <a href="tel:0889541507" className="w-full sm:w-auto text-center px-4 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold rounded-lg border border-slate-200 flex items-center justify-center gap-2 text-sm">
+                <FaPhoneAlt className="text-blue-600" /> 0889.541.507
+              </a>
+            </div>
+            
+            <div className="mt-6 flex items-center justify-center lg:justify-start gap-3">
+              <div className="flex -space-x-2">
+                 <img className="w-8 h-8 rounded-full border border-white bg-slate-200" src="https://ui-avatars.com/api/?name=K+H&background=random" alt="Khách" />
+                 <img className="w-8 h-8 rounded-full border border-white bg-slate-200" src="https://ui-avatars.com/api/?name=Minh&background=random" alt="Khách" />
+                 <img className="w-8 h-8 rounded-full border border-white bg-slate-200" src="https://ui-avatars.com/api/?name=L&background=random" alt="Khách" />
+                 <div className="w-8 h-8 rounded-full border border-white bg-slate-100 flex items-center justify-center font-bold text-slate-500 text-[9px]">+1K</div>
+              </div>
+              <div className="text-[11px] font-medium text-slate-500 leading-tight">Đối tác tin tưởng</div>
+            </div>
+          </div>
+
+          {/* Right Slider Block */}
+          <div className="w-full lg:w-[55%] relative">
+            <div className="relative aspect-[21/9] lg:aspect-[16/7] rounded-xl overflow-hidden border border-slate-100 shadow-sm">
+               {slideImages.map((img, index) => (
+                <div
+                  key={index}
+                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                    index === currentSlide ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  <img src={img} alt={`Slide ${index}`} className="w-full h-full object-cover" />
+                </div>
+              ))}
+               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+               <div className="absolute bottom-3 left-3 bg-white/95 px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-sm">
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                    <FaShieldAlt size={12} />
+                  </div>
+                  <div>
+                    <h3 className="text-slate-900 font-bold text-xs uppercase">Nhập Trực Tiếp Từ Mỏ</h3>
+                  </div>
+               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Search Box - To hơn trên desktop */}
-        <div className="relative z-10 max-w-lg lg:max-w-2xl mx-auto mt-10">
-          <form onSubmit={handleSearch} className="flex rounded-xl overflow-hidden shadow-2xl border-4 border-blue-600/30">
-            <input
-              type="text"
-              name="search"
-              placeholder="Tìm vật liệu (VD: Cát san lấp, Xi măng)..."
-              className="flex-grow px-5 py-4 lg:py-5 text-gray-700 focus:outline-none text-base lg:text-lg"
-            />
-            <button type="submit" className="bg-yellow-500 text-blue-900 px-8 py-4 lg:py-5 flex items-center hover:bg-yellow-400 font-bold text-lg transition-colors">
-              <FaSearch className="mr-2" /> <span className="hidden sm:inline">Tìm Kiếm</span>
-            </button>
-          </form>
+      {/* 2. CHOOSE US - Very Compact */}
+      <section className="py-6 bg-slate-50 border-y border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+             <div className="bg-white rounded-xl p-5 shadow-sm border border-slate-100 flex gap-4 items-start">
+                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0 text-blue-600">
+                  <FaHardHat size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 mb-1">Đa Dạng Mặt Hàng</h3>
+                  <p className="text-slate-500 text-xs leading-relaxed">Cát, đá, thép, gạch, xi măng. Có đủ cho móng đến mái.</p>
+                </div>
+             </div>
+             
+             <div className="bg-white rounded-xl p-5 shadow-sm border border-slate-100 flex gap-4 items-start">
+                <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center shrink-0 text-green-600">
+                  <FaLeaf size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 mb-1">Chiết Khấu Cao</h3>
+                  <p className="text-slate-500 text-xs leading-relaxed">Làm việc trực tiếp nhà máy, báo giá sỉ cạnh tranh.</p>
+                </div>
+             </div>
+
+             <div className="bg-white rounded-xl p-5 shadow-sm border border-slate-100 flex gap-4 items-start">
+                <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center shrink-0 text-purple-600">
+                  <FaBuilding size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 mb-1">Giao Hàng Liền</h3>
+                  <p className="text-slate-500 text-xs leading-relaxed">Xe tải chuyên dụng 2-15T giao đến tận chân công trình.</p>
+                </div>
+             </div>
+           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Categories Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Danh mục cung cấp</h2>
-          <div className="mt-2 w-24 h-1 bg-blue-600 mx-auto rounded"></div>
+      {/* 3. MODERN RETAIL CATEGORY SHOWCASE (10 Items Compact E-commerce grid) */}
+      <section className="py-8 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <div className="flex justify-between items-center mb-5 border-b border-slate-200 pb-2">
+              <h2 className="text-xl font-bold text-slate-900 uppercase">Thư Viện Sản Phẩm</h2>
+              <Link to="/products" className="text-sm text-blue-600 font-semibold hover:underline flex items-center gap-1">
+                 Xem tất cả <FaArrowRight size={10} />
+              </Link>
+           </div>
+
+           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+             {categoryData.map((cat, idx) => (
+                <Link to={`/products?category=${cat.query}`} key={idx} className="group bg-white border border-slate-200 rounded-lg overflow-hidden hover:shadow-md hover:border-blue-400 transition-all flex flex-col items-center">
+                   <div className="aspect-[5/4] w-full overflow-hidden bg-slate-50 relative">
+                     <img src={cat.img} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                   </div>
+                   <div className="p-2.5 w-full text-center bg-slate-50 border-t border-slate-100 group-hover:bg-blue-50 transition-colors">
+                      <h3 className="font-bold text-slate-800 text-xs group-hover:text-blue-700 leading-tight uppercase truncate">{cat.name}</h3>
+                   </div>
+                </Link>
+             ))}
+           </div>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((category) => (
-            <div
-              key={category.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
-              onClick={() => handleCategoryClick(category.path)}
-            >
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="bg-blue-50 text-blue-600 p-5 rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                    {category.icon}
+      {/* 4. PREMIUM PRICING TICKETS (Compact) */}
+      <section className="py-8 bg-slate-50 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <div className="text-center mb-6">
+              <h2 className="text-xl font-bold text-slate-900 uppercase">Báo Giá Khảo Sát</h2>
+              <p className="text-slate-500 text-sm mt-1">Liên hệ 0889.541.507 để có giá chiết khấu tại kho.</p>
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+              {priceHighlights.map((block, idx) => (
+                <div key={idx} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+                  {/* Card Header Minimal */}
+                  <div className={`${block.bg} px-4 py-3 flex items-center justify-between`}>
+                     <h3 className="text-sm font-bold text-white uppercase tracking-wide
+                                  {block.bg.includes('amber') && 'text-slate-900'}" 
+                         style={{color: block.bg.includes('amber') ? '#0f172a' : 'white'}}>
+                       {block.category}
+                     </h3>
+                     <span className="text-white/60 text-xs">Cập nhật</span>
                   </div>
-                  <div className="bg-gray-50 p-3 rounded-full group-hover:bg-yellow-100 transition-colors">
-                    <FaArrowRight className="text-gray-400 group-hover:text-yellow-600 transition-colors" />
+                  
+                  {/* Card Menu Dotted List Minimal */}
+                  <div className="p-4 flex-grow space-y-3 bg-white">
+                    {block.items.map((item, i) => (
+                      <div key={i} className="flex justify-between items-end border-b border-dotted border-slate-200 pb-1.5 custom-dotted-leader">
+                         <div className="leading-tight">
+                            <span className="font-semibold text-slate-700 text-[13px]">{item.name}</span>
+                         </div>
+                         <div className="text-sm font-bold text-red-600 bg-white pl-2 shrink-0">{item.price} <span className="text-[10px] text-slate-400 font-normal">/{item.unit}</span></div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{category.name}</h3>
-                <p className="text-gray-600 leading-relaxed">{category.desc}</p>
-              </div>
-              <div className="w-full h-1.5 bg-gray-100 group-hover:bg-blue-600 transition-colors"></div>
-            </div>
-          ))}
+              ))}
+           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Features Section */}
-      <div className="bg-white py-16 border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Tại sao chọn chúng tôi?</h2>
-            <div className="mt-2 w-24 h-1 bg-yellow-500 mx-auto rounded"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
-            <div className="text-center">
-              <div className="bg-blue-50 text-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                <FaHardHat size={36} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Chất lượng đảm bảo</h3>
-              <p className="text-gray-600 px-4">Vật tư chính hãng, quy cách chuẩn xác, đáp ứng mọi tiêu chuẩn khắt khe nhất của các công trình lớn nhỏ.</p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-blue-50 text-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                <FaTruck size={36} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Giao hàng tận chân công trình</h3>
-              <p className="text-gray-600 px-4">Sở hữu đội xe tải, xe ba gác đa dạng tải trọng. Giao hàng thần tốc trong ngày vào mọi hẻm ngách.</p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-blue-50 text-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                <FaTools size={36} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Báo giá cạnh tranh</h3>
-              <p className="text-gray-600 px-4">Lấy hàng trực tiếp từ bãi, không qua trung gian. Chiết khấu siêu ưu đãi cho nhà thầu và khách sỉ.</p>
-            </div>
-          </div>
+      {/* 5. CTAs & FOOTER BANNER (Compact) */}
+      <section className="py-8 bg-blue-600">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+           <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Nhận Lên Kế Hoạch Báo Giá Vật Tư Dự Án Nhỏ Lớn</h2>
+           <p className="text-blue-100 text-sm mb-5">Hỗ trợ chứng từ CO, CQ. Giao hàng chuẩn số lượng, chuẩn tiến độ.</p>
+           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link to="/contact" className="px-5 py-2.5 bg-white text-blue-600 font-bold rounded-lg shadow-sm text-sm w-full sm:w-auto uppercase">
+                 Gửi Thông Tin Nhận Báo Giá
+              </Link>
+              <a href="tel:0889541507" className="px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg border border-blue-500 text-sm w-full sm:w-auto flex justify-center items-center gap-2 uppercase">
+                 <FaPhoneAlt size={12} /> 0889.541.507
+              </a>
+           </div>
         </div>
-      </div>
+      </section>
+
     </div>
   );
-};
+}
 
-export default HomePage;
