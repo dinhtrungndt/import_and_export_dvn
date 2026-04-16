@@ -37,121 +37,198 @@ const ExportReport = () => {
   });
 
   if (loading) {
-    return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div>;
+    return (
+      <div className="flex flex-col justify-center items-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-100 border-b-blue-600"></div>
+        <span className="mt-4 text-gray-500 font-medium">Đang tải báo cáo...</span>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4">
-      {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md mb-6">
-        <div className="p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold">Bộ lọc báo cáo xuất kho</h2>
+    <div className="container mx-auto px-4 sm:px-6 py-8 max-w-7xl">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center">
+            <FaBox className="mr-3 text-blue-600" />
+            Báo cáo Xuất kho
+          </h1>
+          <p className="text-sm md:text-base text-gray-500 mt-1">Lịch sử và thống kê xuất bán vật liệu xây dựng</p>
         </div>
-        <div className="p-4">
-          <form onSubmit={handleFilterSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Từ ngày</label>
-              <input type="date" className="w-full border rounded-md p-2 text-sm focus:ring-1 focus:ring-blue-500" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Đến ngày</label>
-              <input type="date" className="w-full border rounded-md p-2 text-sm focus:ring-1 focus:ring-blue-500" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Danh mục</label>
-              <select className="w-full border rounded-md p-2 text-sm focus:ring-1 focus:ring-blue-500" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-                <option value="all">Tất cả</option>
-                {APP_CONFIG.PRODUCT_CATEGORIES.map(cat => (
-                  <option key={cat.value} value={cat.value}>{cat.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className="flex items-end">
-              <button type="submit" className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex justify-center items-center font-medium">
-                <FaSearch className="mr-2" /> Lọc dữ liệu
-              </button>
-            </div>
-          </form>
+        <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200 text-sm font-medium text-gray-600">
+          Cập nhật: {new Date().toLocaleDateString('vi-VN')}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow flex items-center">
-          <div className="bg-blue-100 p-3 rounded-full mr-3"><FaBox className="text-blue-500" /></div>
-          <div><p className="text-sm text-gray-500">Số đơn xuất kho</p><p className="text-lg font-semibold">{exportReport.summary.totalExports}</p></div>
+      {/* Filters Panel */}
+      <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5 mb-8">
+        <form onSubmit={handleFilterSubmit} className="flex flex-col md:flex-row gap-4 items-end">
+          <div className="w-full md:w-1/4">
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Từ ngày</label>
+            <input
+              type="date"
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-gray-700"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </div>
+          <div className="w-full md:w-1/4">
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Đến ngày</label>
+            <input
+              type="date"
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-gray-700"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+          <div className="w-full md:w-1/3">
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Danh mục</label>
+            <select
+              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-gray-700 appearance-none bg-white"
+              style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3e%3cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3e%3c/svg%3e")`, backgroundPosition: "right 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em", paddingRight: "2.5rem" }}
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+            >
+              <option value="all">Tất cả danh mục</option>
+              {APP_CONFIG.PRODUCT_CATEGORIES.map(cat => (
+                <option key={cat.value} value={cat.value}>{cat.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="w-full md:w-auto">
+            <button type="submit" className="w-full md:w-auto px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 flex justify-center items-center font-bold shadow-sm hover:shadow-md transition-all transform hover:-translate-y-0.5">
+              <FaSearch className="mr-2" /> Lọc báo cáo
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+        <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl shadow-sm p-6 text-white hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-indigo-100">Số đơn xuất</h3>
+            <div className="bg-white/20 p-2.5 rounded-lg">
+              <FaBox className="h-6 w-6" />
+            </div>
+          </div>
+          <p className="text-3xl font-bold mb-1">{exportReport.summary.totalExports}</p>
+          <p className="text-indigo-200 text-sm mt-2">Tổng số phiếu giao dịch</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow flex items-center">
-          <div className="bg-green-100 p-3 rounded-full mr-3"><FaBox className="text-green-500" /></div>
-          <div><p className="text-sm text-gray-500">Tổng SL xuất</p><p className="text-lg font-semibold">{exportReport.summary.totalQuantity}</p></div>
+
+        <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl shadow-sm p-6 text-white hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-emerald-100">Tổng lượng xuất</h3>
+            <div className="bg-white/20 p-2.5 rounded-lg">
+              <FaBox className="h-6 w-6" />
+            </div>
+          </div>
+          <p className="text-3xl font-bold mb-1">{exportReport.summary.totalQuantity}</p>
+          <p className="text-emerald-100 text-sm mt-2">Đơn vị vật tư đã bán</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow flex items-center">
-          <div className="bg-yellow-100 p-3 rounded-full mr-3"><FaBox className="text-yellow-500" /></div>
-          <div><p className="text-sm text-gray-500">Giá trị xuất kho</p><p className="text-lg font-semibold">{formatCurrency(exportReport.summary.totalValue)}</p></div>
+
+        <div className="bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl shadow-sm p-6 text-white hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-amber-100">Giá trị xuất kho</h3>
+            <div className="bg-white/20 p-2.5 rounded-lg">
+              <FaBox className="h-6 w-6" />
+            </div>
+          </div>
+          <p className="text-2xl md:text-3xl font-bold mb-1 truncate">{formatCurrency(exportReport.summary.totalValue)}</p>
+          <p className="text-amber-100 text-sm mt-2">Tổng giá trị thu về</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md mb-6">
-        <div className="p-4 border-b">
-          <h2 className="text-lg font-semibold">Thống kê xuất kho theo danh mục</h2>
+      {/* Category Stats */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+        <div className="px-6 py-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+          <h2 className="text-lg font-bold text-gray-800">Thống kê theo danh mục</h2>
         </div>
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Danh mục</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Số lần xuất</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Số lượng</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Giá trị</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Danh mục</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Số lần xuất</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Số lượng xuất</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Giá trị</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white divide-y divide-gray-100">
               {Object.entries(exportReport.categoryStats).length > 0 ? (
-                Object.entries(exportReport.categoryStats).map(([category, stats]) => (
-                  <tr key={category}>
-                    <td className="px-6 py-4 whitespace-nowrap"><span className="px-2 py-1 text-xs rounded-md bg-blue-50 border border-blue-100 text-blue-700">{getCategoryLabel(category)}</span></td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{stats.count}</td>
-                    <td className="px-6 py-4 text-sm font-bold text-gray-700">{stats.quantity}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{formatCurrency(stats.value)}</td>
+                Object.entries(exportReport.categoryStats).map(([category, stats], index) => (
+                  <tr key={category} className="hover:bg-gray-50/80 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-3 py-1.5 inline-flex text-xs font-semibold rounded-lg
+                        ${index % 4 === 0 ? 'bg-blue-50 text-blue-700 border border-blue-100' :
+                          index % 4 === 1 ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' :
+                            index % 4 === 2 ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
+                              'bg-amber-50 text-amber-700 border border-amber-100'}`}>
+                        {getCategoryLabel(category)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">{stats.count} lần</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">{stats.quantity}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-600">{formatCurrency(stats.value)}</td>
                   </tr>
                 ))
               ) : (
-                <tr><td colSpan="4" className="text-center py-4 text-gray-500">Không có dữ liệu xuất kho</td></tr>
+                <tr><td colSpan="4" className="px-6 py-8 text-center text-gray-500 text-sm font-medium">Không có dữ liệu xuất kho.</td></tr>
               )}
             </tbody>
           </table>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md">
-        <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="text-lg font-semibold">Chi tiết giao dịch</h2>
-          <div className="relative">
-            <input type="text" placeholder="Tìm vật liệu..." className="pl-8 pr-3 py-1.5 border rounded-md text-sm focus:ring-1 focus:ring-blue-500" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-            <FaSearch className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+      {/* Transaction Detail List */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="p-5 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gray-50/30">
+          <h2 className="text-lg font-bold text-gray-800">Chi tiết giao dịch</h2>
+          <div className="relative w-full sm:w-72">
+            <input
+              type="text"
+              placeholder="Tìm kiếm vật liệu..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <FaSearch className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
         </div>
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto border-t border-gray-50">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên vật liệu</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Danh mục</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Số lượng</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Thành tiền</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ngày xuất</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Tên vật liệu</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Danh mục</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Số lượng</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Thành tiền</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Ngày xuất</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white divide-y divide-gray-100">
               {filteredTransactions.length === 0 ? (
-                <tr><td colSpan="5" className="text-center py-4 text-gray-500">Không tìm thấy giao dịch nào</td></tr>
+                <tr>
+                  <td colSpan="5" className="px-6 py-12 text-center">
+                    <FaBox className="mx-auto h-12 w-12 text-gray-300 mb-3" />
+                    <p className="text-gray-500 font-medium text-sm">Không tìm thấy giao dịch nào</p>
+                  </td>
+                </tr>
               ) : (
                 filteredTransactions.map((tx) => (
-                  <tr key={tx.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{tx.productName}</td>
-                    <td className="px-4 py-3"><span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">{getCategoryLabel(tx.category)}</span></td>
-                    <td className="px-4 py-3 text-sm font-bold text-gray-700">{tx.quantity} {tx.unit}</td>
-                    <td className="px-4 py-3 text-sm text-gray-500">{formatCurrency(tx.value)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-500">{new Date(tx.date).toLocaleString('vi-VN')}</td>
+                  <tr key={tx.id} className="hover:bg-blue-50/50 transition-colors">
+                    <td className="px-6 py-4 text-sm font-bold text-gray-900">{tx.productName}</td>
+                    <td className="px-6 py-4">
+                      <span className="px-2.5 py-1 text-xs font-medium rounded-lg bg-gray-100 text-gray-600 border border-gray-200">
+                        {getCategoryLabel(tx.category)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm font-bold text-gray-700">{tx.quantity} <span className="text-xs text-gray-500 font-normal">{tx.unit}</span></td>
+                    <td className="px-6 py-4 text-sm font-bold text-green-600">{formatCurrency(tx.value)}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500 font-medium">
+                      {new Date(tx.date).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })}
+                    </td>
                   </tr>
                 ))
               )}
