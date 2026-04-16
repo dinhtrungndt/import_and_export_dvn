@@ -12,7 +12,8 @@ import {
   FaSignOutAlt,
   FaTimes,
   FaTrashAlt,
-  FaUser
+  FaUser,
+  FaEnvelope
 } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -389,8 +390,13 @@ export const HeaderPage = () => {
         </span>
         Hệ thống phân phối sỉ & lẻ Vật Liệu Xây Dựng toàn quốc
       </span>
-      <div className="flex items-center gap-5">
-        <a href="tel:0889541507" className="flex items-center gap-2 hover:text-white transition font-medium">
+      <div className="flex items-center gap-4">
+        <a href="mailto:nguyendinhtrung.it@gmail.com" className="flex items-center gap-1.5 hover:text-white transition font-medium">
+          <FaEnvelope className="text-yellow-400" />
+          Email: <span className="text-white tracking-wider">nguyendinhtrung.it@gmail.com</span>
+        </a>
+        <div className="h-3 w-px bg-blue-500/50"></div>
+        <a href="tel:0889541507" className="flex items-center gap-1.5 hover:text-white transition font-medium">
           <FaPhone className="text-yellow-400" />
           Hotline 24/7: <span className="text-white font-bold tracking-wider">0889 541 507</span>
         </a>
