@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 // Pages
 import AboutPage from '../pages/about/index.js';
 import AccountPage from '../pages/account/index.js';
+import CheckoutPage from '../pages/checkout/index.js';
 import ContactPage from '../pages/contact/index.js';
 import OrderHistoryPage from '../pages/history/index.js';
 import HomePage from '../pages/home';
@@ -84,6 +85,10 @@ export const Routers = () => {
 
           <Route path="/account" element={<PrivateRoute />}>
             <Route index element={<AccountPage />} />
+          </Route>
+
+          <Route path="/checkout" element={<PrivateRoute />}>
+            <Route index element={<CheckoutPage />} />
           </Route>
 
           <Route path="/contact" element={<PrivateRoute />}>

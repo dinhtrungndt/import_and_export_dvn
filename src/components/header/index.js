@@ -295,7 +295,7 @@ export const HeaderPage = () => {
   const { user, isAuthenticated, logout, hasRole } = useAuth();
 
   // Cart Hook
-  const { cartItems, cartCount, cartTotal, removeFromCart } = useCart();
+  const { cartItems, cartCount, cartTotal, removeFromCart, updateQuantity } = useCart();
 
   const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 
@@ -468,7 +468,7 @@ export const HeaderPage = () => {
 
             {/* Search Icon */}
             <button
-              className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-all duration-300 overflow-hidden group border border-slate-200 hover:border-blue-200 shadow-sm"
+              className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-all duration-300 group border border-slate-200 hover:border-blue-200 shadow-sm"
               onClick={toggleSearch}
               aria-label="Tìm kiếm"
             >
@@ -478,7 +478,7 @@ export const HeaderPage = () => {
             {/* Profile Dropdown Component */}
             <div className="relative" ref={profileRef}>
               <button
-                className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-all duration-300 overflow-hidden group border border-slate-200 hover:border-blue-200 shadow-sm"
+                className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-all duration-300 group border border-slate-200 hover:border-blue-200 shadow-sm"
                 onClick={() => { setIsProfileDropdownOpen((v) => !v); setIsCartDropdownOpen(false); }}
               >
                 <FaUser className="text-[15px] relative z-10 group-hover:scale-110 transition-transform" />
@@ -561,13 +561,13 @@ export const HeaderPage = () => {
             {/* Shopping Cart Icon & Dropdown */}
             <div className="relative" ref={cartRef}>
               <button
-                className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-all duration-300 overflow-hidden group shadow-sm border border-slate-200 hover:border-blue-200"
+                className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-all duration-300 group shadow-sm border border-slate-200 hover:border-blue-200"
                 onClick={() => { setIsCartDropdownOpen(v => !v); setIsProfileDropdownOpen(false); }}
               >
                 <FaShoppingCart className="text-[15px] relative z-10 group-hover:scale-110 transition-transform" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-0.5 bg-rose-500 text-white text-[9px] leading-none font-bold w-[18px] h-[18px] flex items-center justify-center rounded-full border-2 border-white shadow-sm transform group-hover:scale-110 transition-transform z-20">
-                    {cartCount}
+                  <span className="absolute -top-1 -right-0.5 bg-rose-500 text-white text-[9px] leading-none font-bold min-w-[18px] px-1 h-[18px] flex items-center justify-center rounded-full border-2 border-white shadow-sm transform group-hover:scale-110 transition-transform z-20">
+                    {cartCount > 99 ? '99+' : cartCount}
                   </span>
                 )}
               </button>
@@ -609,15 +609,21 @@ export const HeaderPage = () => {
                             {/* Product Details */}
                             <div className="flex-1 min-w-0 pr-2">
                               <div className="text-sm font-bold text-slate-800 truncate mb-0.5 group-hover:text-blue-600 transition-colors w-full">{item.name}</div>
-                              <div className="text-xs text-slate-500 flex items-center justify-between">
-                                <span>{formatPrice(item.price)} <span className="mx-1">x</span> <span className="font-bold text-slate-700">{item.quantity}</span> {item.unit}</span>
+                              <div className="text-xs text-slate-500 flex items-center justify-between mt-1">
+                                <span>{formatPrice(item.price)} <span className="text-[10px] text-slate-400">/ {item.unit}</span></span>
+                                <div className="flex items-center border border-slate-200 rounded min-w-[60px] bg-white text-slate-800">
+                                   <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateQuantity(item.id, Math.max(1, item.quantity - 1)); }} className="w-5 h-5 flex items-center justify-center hover:bg-slate-100 text-slate-600 transition">-</button>
+                                   <input title="Số lượng" type="number" onClick={(e) => e.stopPropagation()} onChange={(e) => updateQuantity(item.id, Math.max(1, Number(e.target.value)))} value={item.quantity} className="w-8 text-center font-bold text-slate-700 text-[11px] focus:outline-none appearance-none" style={{MozAppearance: 'textfield'}} />
+                                   <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateQuantity(item.id, item.quantity + 1); }} className="w-5 h-5 flex items-center justify-center hover:bg-slate-100 text-slate-600 transition">+</button>
+                                </div>
                               </div>
-                              <div className="text-[13px] font-black text-rose-600 mt-0.5">{formatPrice((item.price || 0) * item.quantity)}</div>
+                              <div className="text-[13px] font-black text-rose-600 mt-1">{formatPrice((item.price || 0) * item.quantity)}</div>
                             </div>
 
                             {/* Remove button */}
                             <button
-                              onClick={() => removeFromCart(item.id)}
+                              type="button"
+                              onClick={(e) => { e.preventDefault(); e.stopPropagation(); removeFromCart(item.id); }}
                               className="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded bg-white border border-transparent hover:border-rose-200 transition shrink-0"
                               title="Xóa"
                             >
