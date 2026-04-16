@@ -105,8 +105,9 @@ const ProductsPage = () => {
   const handleCheckout = async (checkoutData) => {
     try {
       setOrdering(true);
+      // console.log("selectedProduct", selectedProduct);
       const orderData = {
-        items: [{ product_id: selectedProduct._id, quantity }],
+        items: [{ product_id: selectedProduct.id, quantity }],
         payment_method: checkoutData.paymentMethod,
         delivery_address: checkoutData.address,
         notes: checkoutData.notes,

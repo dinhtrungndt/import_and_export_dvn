@@ -37,7 +37,8 @@ export const ProductService = {
 
 export const OrderService = {
   createOrder: async (orderData) => {
-    const response = await apiClient.post('/api/v1/orders/', orderData);
+    const response = await apiClient.post('/api/v1/orders', orderData);
+    // console.log("response createOrder", response);
     return response.data;
   },
   getUserOrders: async () => {
