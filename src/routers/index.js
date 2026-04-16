@@ -1,12 +1,11 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage  from '../pages/home';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { AccountPage } from '../pages/account';
+import { CartPage } from '../pages/cart';
+import { ContactPage } from '../pages/contact';
+import OrderHistoryPage from '../pages/history';
+import HomePage from '../pages/home';
 import ProductsPage from '../pages/products';
 import ProductDetailPage from '../pages/products/detail';
-import OrderHistoryPage  from '../pages/history';
-// import { CartPage } from './pages/cart';
-// import { AccountPage } from './pages/account';
-// import { ContactPage } from './pages/contact';
 
 export const Routers = () => {
   return (
@@ -16,9 +15,9 @@ export const Routers = () => {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/order-history" element={<OrderHistoryPage />} />
-        {/* <Route path="/cart" element={<CartPage />} />
+        <Route path="/cart" element={<CartPage />} />
         <Route path="/account" element={<AccountPage />} />
-        <Route path="/contact" element={<ContactPage />} /> */}
+        <Route path="/contact" element={<ContactPage />} />
       </Routes>
     </BrowserRouter>
   );
