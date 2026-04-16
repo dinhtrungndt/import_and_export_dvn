@@ -131,3 +131,15 @@ export const ExpenseService = {
     return response.data;
   }
 };
+
+export const PostService = {
+  getPosts: async (params = {}) => {
+    const response = await apiClient.get('/api/v1/posts/', { params });
+    return response.data;
+  },
+  getPostBySlug: async (slug) => {
+    const response = await apiClient.get(`/api/v1/posts/${slug}`);
+    return response.data;
+  }
+};
+

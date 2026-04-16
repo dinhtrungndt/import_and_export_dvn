@@ -39,7 +39,7 @@ const ProductsPage = () => {
 
   const { products = [], loading = false } = useSelector((state) => state.adminReducer || {});
 
-  console.log(products.filter(item => item.id === '0c3da9c3-3c9d-4104-b59b-a0abc6a78503'));
+  // console.log(products.filter(item => item.id === '0c3da9c3-3c9d-4104-b59b-a0abc6a78503'));
 
   // Sync state if URL changes externally (e.g. from header nav links)
   useEffect(() => {

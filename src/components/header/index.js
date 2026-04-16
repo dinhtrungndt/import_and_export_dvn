@@ -37,43 +37,45 @@ const PRODUCTS_SUBMENU = [
 const PRICE_MEGAMENU = [
   {
     title: 'Báo giá Đá',
-    href: '/products?category=da-xay-dung',
+    href: '/bao-gia',
     items: [
-      { label: 'Đá mi bụi', href: '/products?search=Đá mi bụi' },
-      { label: 'Đá mi sàng', href: '/products?search=Đá mi sàng' },
-      { label: 'Đá 0x4', href: '/products?search=Đá 0x4' },
-      { label: 'Đá 1×2', href: '/products?search=Đá 1x2' },
-      { label: 'Đá 4×6', href: '/products?search=Đá 4x6' },
-      { label: 'Đá hộc', href: '/products?search=Đá hộc' },
-      { label: 'Đá cấp phối dmax 25, dmax 37.5', href: '/products?search=Đá cấp phối' },
+      { label: 'Đá mi bụi', href: '/bao-gia/bao-gia-da-mi-bui' },
+      { label: 'Đá mi sàng', href: '/bao-gia/bao-gia-da-mi-sang' },
+      { label: 'Đá 0x4', href: '/bao-gia/bao-gia-da-0x4' },
+      { label: 'Đá 1×2', href: '/bao-gia/bao-gia-da-1x2' },
+      { label: 'Đá 4×6', href: '/bao-gia/bao-gia-da-4x6' },
+      { label: 'Đá hộc', href: '/bao-gia/bao-gia-da-hoc' },
+      { label: 'Đá cấp phối dmax 25, dmax 37.5', href: '/bao-gia/bao-gia-da-cap-phoi' },
     ],
   },
   {
     title: 'Báo giá Cát',
-    href: '/products?category=cat-xay-dung',
+    href: '/bao-gia/bao-gia-cat-da-dong-bao-quan-11',
     items: [
-      { label: 'Cát san lấp', href: '/products?search=Cát san lấp' },
-      { label: 'Cát xây tô', href: '/products?search=Cát xây tô' },
-      { label: 'Cát bê tông', href: '/products?search=Cát bê tông' },
+      { label: 'Cát san lấp', href: '/bao-gia/bao-gia-cat-san-lap' },
+      { label: 'Cát xây tô', href: '/bao-gia/bao-gia-cat-xay-to' },
+      { label: 'Cát bê tông', href: '/bao-gia/bao-gia-cat-be-tong' },
     ],
   },
   {
     title: 'Báo giá Xi Măng',
-    href: '/products?category=xi-mang',
+    href: '/bao-gia/bao-gia-xi-mang-xay-dung-moi-nhat',
     items: [
-      { label: 'Xi măng Thăng Long', href: '/products?search=Xi măng Thăng Long' },
-      { label: 'Xi măng Nghi Sơn', href: '/products?search=Xi măng Nghi Sơn' },
-      { label: 'Xi măng INSEE', href: '/products?search=Xi măng INSEE' },
-      { label: 'Xi măng Hoàng Thạch', href: '/products?search=Xi măng Hoàng Thạch' },
-      { label: 'Xi măng Hà Tiên', href: '/products?search=Xi măng Hà Tiên' },
-      { label: 'Xi măng Bỉm Sơn', href: '/products?search=Xi măng Bỉm Sơn' },
+      { label: 'Xi măng Thăng Long', href: '/bao-gia/bao-gia-xi-mang-thang-long' },
+      { label: 'Xi măng Nghi Sơn', href: '/bao-gia/bao-gia-xi-mang-nghi-son' },
+      { label: 'Xi măng INSEE', href: '/bao-gia/bao-gia-xi-mang-insee' },
+      { label: 'Xi măng Hoàng Thạch', href: '/bao-gia/bao-gia-xi-mang-hoang-thach' },
+      { label: 'Xi măng Hà Tiên', href: '/bao-gia/bao-gia-xi-mang-ha-tien' },
+      { label: 'Xi măng Bỉm Sơn', href: '/bao-gia/bao-gia-xi-mang-bim-son' },
     ],
   },
   {
-    title: 'Báo giá Xà Bần',
-    href: '/products?search=Xà bần',
+    title: 'Báo giá VLXD Khác',
+    href: '/bao-gia',
     items: [
-      { label: 'Xà bần sạch', href: '/products?search=Xà bần sạch' },
+      { label: 'Xà bần sạch', href: '/bao-gia/bao-gia-xa-ban-sach' },
+      { label: 'Sắt hộp', href: '/bao-gia/bao-gia-sat-hop-quan-tan-binh-uy-tin' },
+      { label: 'Vữa trộn sẵn', href: '/bao-gia/bao-gia-vua-tron-san-2026' }
     ],
   },
 ];
@@ -381,13 +383,13 @@ export const HeaderPage = () => {
             <MegaDropdown
               label="Báo Giá"
               columns={PRICE_MEGAMENU}
-              isActive={isActive('/price') || isActive('/products?cat')}
-              href="/price"
+              isActive={isActive('/bao-gia')}
+              href="/bao-gia"
             />
 
             <NavLink to="/services" isActive={isActive('/services')}>Dịch Vụ</NavLink>
 
-            <NavLink to="/news" isActive={isActive('/news')}>Tin Tức</NavLink>
+            <NavLink to="/tin-tuc" isActive={isActive('/tin-tuc')}>Tin Tức</NavLink>
 
             <NavLink to="/contact" isActive={isActive('/contact')}>Liên Hệ</NavLink>
           </nav>

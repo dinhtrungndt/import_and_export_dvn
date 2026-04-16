@@ -11,6 +11,8 @@ import ProductsPage from '../pages/products/index.js';
 import Login from '../pages/user/Login/index.js';
 import Register from '../pages/user/Register/index.js';
 import Unauthorized from '../pages/user/Unauthorized/index.js';
+import PostsPage from '../pages/posts/index.js';
+import PostDetailPage from '../pages/posts/detail/index.js';
 
 // Admin Pages
 import AdminDashboard from '../pages/admin/Dashboard';
@@ -86,6 +88,17 @@ export const Routers = () => {
 
           <Route path="/contact" element={<PrivateRoute />}>
             <Route index element={<ContactPage />} />
+          </Route>
+
+          {/* Posts routes */}
+          <Route path="/bao-gia" element={<PrivateRoute />}>
+            <Route index element={<PostsPage />} />
+            <Route path=":slug" element={<PostDetailPage />} />
+          </Route>
+          
+          <Route path="/tin-tuc" element={<PrivateRoute />}>
+            <Route index element={<PostsPage />} />
+            <Route path=":slug" element={<PostDetailPage />} />
           </Route>
         </Route>
 
