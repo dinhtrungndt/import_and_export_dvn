@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 // Pages
 import AboutPage from '../pages/about/index.js';
 import AccountPage from '../pages/account/index.js';
-import ContactPage from '../pages/admin/contact/index.js';
+import ContactPage from '../pages/contact/index.js';
 import OrderHistoryPage from '../pages/history/index.js';
 import HomePage from '../pages/home';
 import ProductDetailPage from '../pages/products/detail/index.js';
