@@ -20,7 +20,7 @@ const AdminProductsPage = () => {
   const [confirmHide, setConfirmHide] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(22);
   const [showFilters, setShowFilters] = useState(false);
   const [activeActionMenu, setActiveActionMenu] = useState(null);
 
@@ -161,169 +161,226 @@ const AdminProductsPage = () => {
   };
 
   return (
-    <div className="px-2 py-4">
-      <div className="flex flex-col mb-4">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-bold text-gray-900">Quản lý VLXD</h1>
-          <button
-            onClick={() => navigate('/admin/add-products')}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-3 text-sm rounded-lg flex items-center"
-          >
-            <FaPlus className="mr-1" />
-            <span className="hidden sm:inline">Thêm vật liệu mới</span>
-            <span className="sm:hidden">Thêm</span>
-          </button>
+    <div className="container mx-auto px-4 sm:px-6 py-8 max-w-7xl">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center">
+            <FaCube className="mr-3 text-blue-600" />
+            Quản lý Vật Liệu
+          </h1>
+          <p className="text-sm md:text-base text-gray-500 mt-1">Quản lý kho hàng, giá bán và tình trạng vật tư</p>
         </div>
+        <button
+          onClick={() => navigate('/admin/add-products')}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-xl flex items-center shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5"
+        >
+          <FaPlus className="mr-2" />
+          <span>Thêm vật liệu mới</span>
+        </button>
+      </div>
 
-        <div className="bg-white shadow rounded-lg p-3 mb-3">
-          <form onSubmit={handleSearch} className="flex mb-2">
+      {/* Control Panel: Search & Filters */}
+      <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-4 md:p-5 mb-8">
+        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+          <form onSubmit={handleSearch} className="relative w-full md:w-96">
             <input
               type="text"
               name="search"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Tìm kiếm vật liệu (cát, đá, xi măng...)"
-              className="w-full rounded-l-lg border border-gray-300 px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
-            <button type="submit" className="bg-blue-600 text-white rounded-r-lg px-3 py-2 hover:bg-blue-700">
-              <FaSearch />
-            </button>
+            <FaSearch className="absolute left-3.5 top-3.5 text-gray-400" />
+            <button type="submit" className="hidden">Tìm</button>
           </form>
 
-          <div className="flex justify-between items-center">
-            <button onClick={() => setShowFilters(!showFilters)} className="text-blue-600 text-sm flex items-center">
-              <FaFilter className="mr-1" /> {showFilters ? 'Ẩn bộ lọc' : 'Hiện bộ lọc'}
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <button 
+              onClick={() => setShowFilters(!showFilters)} 
+              className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border transition-all text-sm font-medium ${showFilters ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'}`}
+            >
+              <FaFilter /> {showFilters ? 'Ẩn bộ lọc' : 'Lọc & Sắp xếp'}
+              {(searchTerm || selectedCategory !== 'all' || sortField !== 'createdAt' || sortOrder !== 'desc') && (
+                <span className="flex h-2.5 w-2.5 relative ml-1">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+                </span>
+              )}
             </button>
             {(searchTerm || selectedCategory !== 'all' || sortField !== 'createdAt' || sortOrder !== 'desc') && (
-              <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Đang lọc</span>
+               <button onClick={resetFilters} className="text-sm font-medium text-gray-500 hover:text-red-500 transition-colors px-2">
+                 Xóa lọc
+               </button>
             )}
           </div>
-
-          {showFilters && (
-            <div className="mt-3 pt-3 border-t border-gray-200">
-              <div className="mb-3">
-                <label className="block text-xs font-medium text-gray-700 mb-1">Danh mục:</label>
-                <div className="flex flex-wrap gap-1">
-                  <button
-                    onClick={() => handleCategoryChange('all')}
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${selectedCategory === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
-                  >
-                    Tất cả
-                  </button>
-                  {APP_CONFIG.PRODUCT_CATEGORIES.map((category) => (
-                    <button
-                      key={category.value}
-                      onClick={() => handleCategoryChange(category.value)}
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${selectedCategory === category.value ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
-                    >
-                      {category.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <label className="block text-xs font-medium text-gray-700 mb-1">Sắp xếp theo:</label>
-                <div className="grid grid-cols-2 gap-1">
-                  <button onClick={() => handleSort('name')} className={`px-2 py-1 text-xs rounded flex items-center justify-center ${sortField === 'name' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}>
-                    Tên {sortField === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </button>
-                  <button onClick={() => handleSort('price')} className={`px-2 py-1 text-xs rounded flex items-center justify-center ${sortField === 'price' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}>
-                    Giá {sortField === 'price' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </button>
-                  <button onClick={() => handleSort('stock')} className={`px-2 py-1 text-xs rounded flex items-center justify-center ${sortField === 'stock' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}>
-                    Tồn kho {sortField === 'stock' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </button>
-                  <button onClick={() => handleSort('createdAt')} className={`px-2 py-1 text-xs rounded flex items-center justify-center ${sortField === 'createdAt' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}>
-                    Ngày tạo {sortField === 'createdAt' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </button>
-                </div>
-              </div>
-              <button onClick={resetFilters} className="mt-1 text-blue-600 text-xs underline">Xóa bộ lọc</button>
-            </div>
-          )}
         </div>
+
+        {/* Enhanced Filter Panel */}
+        {showFilters && (
+          <div className="mt-5 pt-5 border-t border-gray-100 flex flex-col lg:flex-row gap-6">
+            <div className="flex-1">
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Danh mục sản phẩm</label>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => handleCategoryChange('all')}
+                  className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all ${selectedCategory === 'all' ? 'bg-gray-800 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                >
+                  Tất cả
+                </button>
+                {APP_CONFIG.PRODUCT_CATEGORIES.map((category) => (
+                  <button
+                    key={category.value}
+                    onClick={() => handleCategoryChange(category.value)}
+                    className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all ${selectedCategory === category.value ? 'bg-blue-600 text-white shadow-sm' : 'bg-blue-50 text-blue-700 hover:bg-blue-100'}`}
+                  >
+                    {category.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:w-1/3 border-t lg:border-t-0 lg:border-l border-gray-100 lg:pl-6 pt-5 lg:pt-0">
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Sắp xếp theo</label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { field: 'createdAt', label: 'Ngày tạo' },
+                  { field: 'name', label: 'Tên vật liệu' },
+                  { field: 'price', label: 'Giá bán' },
+                  { field: 'stock', label: 'Tồn kho' }
+                ].map(item => (
+                  <button 
+                    key={item.field}
+                    onClick={() => handleSort(item.field)} 
+                    className={`px-3 py-2 text-sm rounded-lg flex items-center justify-between transition-all ${sortField === item.field ? 'bg-blue-50 text-blue-700 border border-blue-200 font-medium' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+                  >
+                    {item.label}
+                    {sortField === item.field && (
+                      <span className="text-blue-500">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {loading && (
-        <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-sm text-gray-600 font-medium">Đang tải...</span>
+        <div className="flex flex-col justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-100 border-b-blue-600"></div>
+          <span className="mt-4 text-gray-500 font-medium">Đang tải dữ liệu...</span>
         </div>
       )}
 
       {!loading && !error && (
         <>
           {products.length === 0 ? (
-            <div className="bg-white rounded-lg shadow p-6 text-center">
-              <div className="bg-gray-100 rounded-full p-3 w-16 h-16 flex items-center justify-center mx-auto">
-                <FaCube className="h-8 w-8 text-gray-400" />
+            <div className="bg-white border border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center py-24 text-center">
+              <div className="bg-gray-50 rounded-full p-4 mb-4">
+                <FaCube className="h-10 w-10 text-gray-300" />
               </div>
-              <h3 className="mt-3 text-base font-medium text-gray-900">Không tìm thấy vật liệu</h3>
-              <p className="mt-2 text-sm text-gray-500">Hãy thử thay đổi bộ lọc hoặc thêm vật liệu mới.</p>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Không tìm thấy vật liệu nào</h3>
+              <p className="text-gray-500 max-w-sm">Không có dữ liệu khớp với bộ lọc hiện tại của bạn. Hãy thử thay đổi từ khóa hoặc thêm sản phẩm mới.</p>
+              <button onClick={resetFilters} className="mt-4 text-blue-600 font-medium hover:underline">Xóa tất cả bộ lọc</button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
               {currentItems.map((product) => (
-                <div key={product.id} onClick={(e) => handleEditProduct(product.id, e)} className="bg-white rounded-lg shadow overflow-hidden cursor-pointer hover:shadow-md transition-all relative">
-                  <div className="relative">
+                <div key={product.id} onClick={(e) => handleEditProduct(product.id, e)} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer hover:shadow-lg transition-all duration-300 group flex flex-col relative">
+                  
+                  {/* Image Section */}
+                  <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
                     <img
                       src={product.image || `https://ui-avatars.com/api/?background=EBF4FF&color=4F46E5&bold=true&name=${encodeURIComponent(product.name)}`}
                       alt={product.name}
-                      className="w-full h-36 object-cover"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                     />
-                  </div>
-                  <div className="p-3">
-                    <h3 className="text-sm font-medium text-gray-900 line-clamp-2 h-10">{product.name}</h3>
-                    <p className="text-base font-bold text-red-600 mt-1.5">{formatPrice(product.price)} <span className="text-xs font-normal text-gray-500">/ {product.unit}</span></p>
-                    <div className="mt-2 flex items-center justify-between">
-                      <span className="text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-md truncate max-w-[80px]">
-                        {APP_CONFIG.PRODUCT_CATEGORIES.find((c) => c.value === product.category)?.label || product.category}
-                      </span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    {/* Status badges */}
+                    <div className="absolute top-3 left-3 flex flex-col gap-1.5">
                       {product.stock <= 0 ? (
-                        <span className="text-xs text-white bg-red-500 px-1.5 py-0.5 rounded-md font-medium">Hết hàng</span>
+                        <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white bg-red-500 rounded-md shadow-sm">Hết hàng</span>
                       ) : product.stock < 10 ? (
-                        <span className="text-xs text-white bg-amber-500 px-1.5 py-0.5 rounded-md font-medium flex items-center">Còn {product.stock}</span>
+                        <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-400 rounded-md shadow-sm">Sắp hết ({product.stock})</span>
                       ) : (
-                        <span className="text-xs text-white bg-green-500 px-1.5 py-0.5 rounded-md font-medium">Còn hàng</span>
+                         <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-green-800 bg-green-400 rounded-md shadow-sm">Sẵn sàng</span>
                       )}
                     </div>
-                  </div>
 
-                  <div className="relative">
-                    <button onClick={(e) => toggleActionMenu(product.id, e)} className="absolute bottom-2 right-2 p-1.5 rounded-full text-gray-400 hover:bg-gray-100 bg-white shadow-sm">
+                    <button onClick={(e) => toggleActionMenu(product.id, e)} className="absolute top-3 right-3 p-1.5 rounded-lg text-gray-700 bg-white/90 backdrop-blur-sm hover:bg-white shadow-sm transition-all opacity-0 group-hover:opacity-100 focus:opacity-100">
                       <FaEllipsisV size={14} />
                     </button>
+
                     {activeActionMenu === product.id && (
-                      <div className="absolute right-2 bottom-full mb-1 w-36 bg-white rounded-md shadow-lg z-10 py-1 border border-gray-100">
-                        <button onClick={(e) => handleViewProduct(product.id, e)} className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                      <div className="absolute right-3 top-10 w-40 bg-white rounded-xl shadow-xl z-10 py-1.5 border border-gray-100 transform origin-top-right transition-all">
+                        <button onClick={(e) => handleViewProduct(product.id, e)} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 flex items-center transition-colors">
                           <FaEye className="mr-2 text-blue-500" /> Xem chi tiết
                         </button>
-                        <button onClick={(e) => handleEditProduct(product.id, e)} className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                        <button onClick={(e) => handleEditProduct(product.id, e)} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center transition-colors">
                           <FaEdit className="mr-2 text-indigo-500" /> Chỉnh sửa
                         </button>
-                        <button onClick={(e) => handleHideProduct(product.id, e)} className={`w-full px-3 py-2 text-left text-sm flex items-center ${confirmHide === product.id ? 'text-red-700 bg-red-50' : 'text-gray-700 hover:bg-gray-100'}`}>
-                          {isProcessing && confirmHide === product.id ? <FaSpinner className="animate-spin mr-2 text-red-500" /> : <FaEyeSlash className="mr-2 text-red-500" />}
-                          {confirmHide === product.id ? 'Xác nhận ẩn?' : 'Ẩn VLXD'}
+                        <div className="h-px bg-gray-100 my-1"></div>
+                        <button onClick={(e) => handleHideProduct(product.id, e)} className={`w-full px-4 py-2 text-left text-sm flex items-center transition-colors ${confirmHide === product.id ? 'text-red-700 bg-red-50 font-medium' : 'text-gray-700 hover:bg-red-50 hover:text-red-600'}`}>
+                          {isProcessing && confirmHide === product.id ? <FaSpinner className="animate-spin mr-2 text-red-500" /> : <FaEyeSlash className="mr-2 text-red-400" />}
+                          {confirmHide === product.id ? 'Xác nhận ẩn?' : 'Ẩn vật liệu'}
                         </button>
                       </div>
                     )}
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="p-4 flex flex-col flex-1">
+                    <span className="text-[11px] font-semibold text-blue-600 uppercase tracking-wider mb-1 line-clamp-1">
+                      {APP_CONFIG.PRODUCT_CATEGORIES.find((c) => c.value === product.category)?.label || product.category}
+                    </span>
+                    <h3 className="text-sm md:text-base font-bold text-gray-900 leading-snug line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors">{product.name}</h3>
+                    
+                    <div className="mt-auto pt-2 border-t border-gray-50 flex items-end justify-between">
+                      <div>
+                        <p className="text-[10px] text-gray-500 font-medium mb-0.5">GIÁ BÁN</p>
+                        <p className="text-lg font-bold text-red-600 leading-none">{formatPrice(product.price)} <span className="text-xs font-medium text-gray-500">/{product.unit}</span></p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
 
+          {/* Elegant Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-between items-center mt-4 bg-white p-3 rounded-lg shadow">
-              <button onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))} disabled={currentPage === 1} className={`px-3 py-1 rounded text-sm ${currentPage === 1 ? 'bg-gray-100 text-gray-400' : 'bg-blue-100 text-blue-700'}`}>
-                Trước
-              </button>
-              <span className="text-sm text-gray-600">Trang {currentPage} / {totalPages}</span>
-              <button onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))} disabled={currentPage === totalPages} className={`px-3 py-1 rounded text-sm ${currentPage === totalPages ? 'bg-gray-100 text-gray-400' : 'bg-blue-100 text-blue-700'}`}>
-                Sau
-              </button>
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-100">
+              <span className="text-sm font-medium text-gray-500">
+                Hiển thị <span className="text-gray-900 font-bold">{indexOfFirstItem + 1}</span> - <span className="text-gray-900 font-bold">{Math.min(indexOfLastItem, products.length)}</span> trong số <span className="text-gray-900 font-bold">{products.length}</span> vật liệu
+              </span>
+              
+              <div className="flex items-center gap-1.5 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
+                <button 
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))} 
+                  disabled={currentPage === 1} 
+                  className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed hidden sm:block' : 'text-gray-700 bg-white shadow-sm hover:text-blue-600 hover:shadow'}`}
+                >
+                  Trước
+                </button>
+                
+                <div className="flex items-center justify-center min-w-[4rem] px-2 bg-white rounded-lg py-1.5 shadow-sm border border-gray-100 mx-1">
+                  <span className="text-sm font-bold text-blue-600">{currentPage}</span>
+                  <span className="text-sm text-gray-400 mx-1.5">/</span>
+                  <span className="text-sm font-medium text-gray-600">{totalPages}</span>
+                </div>
+
+                <button 
+                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))} 
+                  disabled={currentPage === totalPages} 
+                  className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${currentPage === totalPages ? 'text-gray-400 cursor-not-allowed hidden sm:block' : 'text-gray-700 bg-white shadow-sm hover:text-blue-600 hover:shadow'}`}
+                >
+                  Sau
+                </button>
+              </div>
             </div>
           )}
         </>
