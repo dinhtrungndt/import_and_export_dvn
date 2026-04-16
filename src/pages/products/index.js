@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaBuilding, FaFilter, FaSearch } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -41,17 +41,24 @@ const ProductsPage = () => {
 
   useEffect(() => {
     const apiParams = {};
+
     if (selectedCategory !== 'all') apiParams.category = selectedCategory;
     if (searchTerm) apiParams.search = searchTerm;
-    apiParams.sortOption = sortOption;
+
+    apiParams.sort = sortOption;
 
     const queryParams = new URLSearchParams();
     if (selectedCategory !== 'all') queryParams.set('category', selectedCategory);
     if (searchTerm) queryParams.set('search', searchTerm);
     if (sortOption !== 'createdAt_desc') queryParams.set('sort', sortOption);
 
-    navigate({ pathname: '/products', search: queryParams.toString() }, { replace: true });
+    navigate(
+      { pathname: '/products', search: queryParams.toString() },
+      { replace: true }
+    );
+
     dispatch(fetchProducts(apiParams));
+
   }, [selectedCategory, searchTerm, sortOption, dispatch, navigate]);
 
   const handleSearch = (e) => {
@@ -126,18 +133,8 @@ const ProductsPage = () => {
     }
   };
 
-  const sortedProducts = useMemo(() => {
-    if (!products.length) return [];
-    const productsCopy = [...products];
-    const [field, order] = sortOption.split('_');
-    return productsCopy.sort((a, b) => {
-      if (order === 'asc') return a[field] > b[field] ? 1 : -1;
-      return a[field] < b[field] ? 1 : -1;
-    });
-  }, [products, sortOption]);
-
-  const currentItems = sortedProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
+  const currentItems = products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = Math.ceil(products.length / itemsPerPage);
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -200,7 +197,7 @@ const ProductsPage = () => {
         <div className="flex-1">
           <div className="mb-4 pb-4 border-b border-gray-200 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-gray-900">Bảng Giá Vật Liệu</h1>
-            <span className="text-sm text-gray-500">Hiển thị {currentItems.length} / {sortedProducts.length} kết quả</span>
+            <span className="text-sm text-gray-500">Hiển thị {currentItems.length} / {products.length} kết quả</span>
           </div>
 
           {loading ? (
