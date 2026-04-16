@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { APP_CONFIG } from '../../../config';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useCart } from '../../../contexts/CartContext';
 import { createOrder, fetchProductById, fetchProducts } from '../../../stores/redux/actions/adminActions.js';
 import PayMent from '../payment/index.js';
 
@@ -13,6 +14,7 @@ const ProductDetailPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated } = useAuth();
+  const { addToCart } = useCart();
 
   const [quantity, setQuantity] = useState(1);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -203,17 +205,27 @@ const ProductDetailPage = () => {
                     <button type="button" className="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-100 rounded transition-colors" onClick={() => setQuantity(q => Math.min(productDetail.stock, q + 1))}><FaPlus size={12} /></button>
                   </div>
 
-                  <div className="flex-1">
+                  <div className="flex-1 flex gap-2">
+                    <button
+                      onClick={() => {
+                        addToCart(productDetail, quantity);
+                        toast.success('Đã thêm sản phẩm vào giỏ hàng!');
+                      }}
+                      disabled={productDetail.stock <= 0}
+                      className="w-1/2 py-2 sm:py-3 disabled:bg-slate-300 disabled:shadow-none bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-xs sm:text-sm flex justify-center items-center gap-1.5 transition-all shadow-md hover:shadow-lg"
+                    >
+                      {productDetail.stock > 0 ? (
+                        <><FaShoppingCart size={14} /> Thêm Giỏ</>
+                      ) : (
+                        'HẾT HÀNG'
+                      )}
+                    </button>
                     <button
                       onClick={handleBuyNow}
                       disabled={productDetail.stock <= 0}
-                      className="w-full py-3 disabled:bg-slate-300 disabled:shadow-none bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-sm sm:text-base flex justify-center items-center gap-2 transition-all shadow-md hover:shadow-lg"
+                      className="w-1/2 py-2 sm:py-3 disabled:bg-slate-300 disabled:shadow-none bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs sm:text-sm flex justify-center items-center transition-all shadow-md hover:shadow-lg"
                     >
-                      {productDetail.stock > 0 ? (
-                        <><FaShoppingCart size={16} /> MUA NGAY</>
-                      ) : (
-                        'TẠM HẾT HÀNG'
-                      )}
+                      {productDetail.stock > 0 ? 'MUA NGAY' : 'TẠM HẾT HÀNG'}
                     </button>
                   </div>
                 </div>
