@@ -22,58 +22,58 @@ import { SideBar } from '../sidebar';
    Dữ liệu menu
 ───────────────────────────────────────────── */
 const PRODUCTS_SUBMENU = [
-  { label: 'Sắt Thép Xây Dựng', href: '/products?cat=sat-thep' },
-  { label: 'Cát Đá Đóng Bao', href: '/products?cat=cat-da-dong-bao' },
-  { label: 'Cát Xây Dựng', href: '/products?cat=cat-xay-dung' },
-  { label: 'Gạch Tuynel', href: '/products?cat=gach-tuynel' },
-  { label: 'Đá Xây Dựng', href: '/products?cat=da-xay-dung' },
-  { label: 'Xi Măng', href: '/products?cat=xi-mang' },
-  { label: 'Dây Kẽm & Đinh', href: '/products?cat=day-kem-dinh' },
-  { label: 'Lưới Thép', href: '/products?cat=luoi-thep' },
-  { label: 'Thép Hình', href: '/products?cat=thep-hinh' },
-  { label: 'Thép Hộp', href: '/products?cat=thep-hop' },
+  { label: 'Sắt Thép Xây Dựng', href: '/products?category=sat-thep' },
+  { label: 'Cát Đá Đóng Bao', href: '/products?category=cat-da-dong-bao' },
+  { label: 'Cát Xây Dựng', href: '/products?category=cat-xay-dung' },
+  { label: 'Gạch Tuynel', href: '/products?category=gach-tuynel' },
+  { label: 'Đá Xây Dựng', href: '/products?category=da-xay-dung' },
+  { label: 'Xi Măng', href: '/products?category=xi-mang' },
+  { label: 'Dây Kẽm & Đinh', href: '/products?category=day-kem-dinh' },
+  { label: 'Lưới Thép', href: '/products?category=luoi-thep' },
+  { label: 'Thép Hình', href: '/products?category=thep-hinh' },
+  { label: 'Thép Hộp', href: '/products?category=thep-hop' },
 ];
 
 const PRICE_MEGAMENU = [
   {
     title: 'Báo giá Đá',
-    href: '/products?cat=da-xay-dung',
+    href: '/products?category=da-xay-dung',
     items: [
-      { label: 'Đá mi bụi', href: '/products?cat=da-mi-bui' },
-      { label: 'Đá mi sàng', href: '/products?cat=da-mi-sang' },
-      { label: 'Đá 0x4', href: '/products?cat=da-0x4' },
-      { label: 'Đá 1×2', href: '/products?cat=da-1x2' },
-      { label: 'Đá 4×6', href: '/products?cat=da-4x6' },
-      { label: 'Đá hộc', href: '/products?cat=da-hoc' },
-      { label: 'Đá cấp phối dmax 25, dmax 37.5', href: '/products?cat=da-cap-phoi' },
+      { label: 'Đá mi bụi', href: '/products?search=Đá mi bụi' },
+      { label: 'Đá mi sàng', href: '/products?search=Đá mi sàng' },
+      { label: 'Đá 0x4', href: '/products?search=Đá 0x4' },
+      { label: 'Đá 1×2', href: '/products?search=Đá 1x2' },
+      { label: 'Đá 4×6', href: '/products?search=Đá 4x6' },
+      { label: 'Đá hộc', href: '/products?search=Đá hộc' },
+      { label: 'Đá cấp phối dmax 25, dmax 37.5', href: '/products?search=Đá cấp phối' },
     ],
   },
   {
     title: 'Báo giá Cát',
-    href: '/products?cat=cat-xay-dung',
+    href: '/products?category=cat-xay-dung',
     items: [
-      { label: 'Cát san lấp', href: '/products?cat=cat-san-lap' },
-      { label: 'Cát xây tô', href: '/products?cat=cat-xay-to' },
-      { label: 'Cát bê tông', href: '/products?cat=cat-be-tong' },
+      { label: 'Cát san lấp', href: '/products?search=Cát san lấp' },
+      { label: 'Cát xây tô', href: '/products?search=Cát xây tô' },
+      { label: 'Cát bê tông', href: '/products?search=Cát bê tông' },
     ],
   },
   {
     title: 'Báo giá Xi Măng',
-    href: '/products?cat=xi-mang',
+    href: '/products?category=xi-mang',
     items: [
-      { label: 'Xi măng Thăng Long', href: '/products?cat=xi-mang-thang-long' },
-      { label: 'Xi măng Nghi Sơn', href: '/products?cat=xi-mang-nghi-son' },
-      { label: 'Xi măng INSEE', href: '/products?cat=xi-mang-insee' },
-      { label: 'Xi măng Hoàng Thạch', href: '/products?cat=xi-mang-hoang-thach' },
-      { label: 'Xi măng Hà Tiên', href: '/products?cat=xi-mang-ha-tien' },
-      { label: 'Xi măng Bỉm Sơn', href: '/products?cat=xi-mang-bim-son' },
+      { label: 'Xi măng Thăng Long', href: '/products?search=Xi măng Thăng Long' },
+      { label: 'Xi măng Nghi Sơn', href: '/products?search=Xi măng Nghi Sơn' },
+      { label: 'Xi măng INSEE', href: '/products?search=Xi măng INSEE' },
+      { label: 'Xi măng Hoàng Thạch', href: '/products?search=Xi măng Hoàng Thạch' },
+      { label: 'Xi măng Hà Tiên', href: '/products?search=Xi măng Hà Tiên' },
+      { label: 'Xi măng Bỉm Sơn', href: '/products?search=Xi măng Bỉm Sơn' },
     ],
   },
   {
     title: 'Báo giá Xà Bần',
-    href: '/products?cat=xa-ban',
+    href: '/products?search=Xà bần',
     items: [
-      { label: 'Xà bần sạch', href: '/products?cat=xa-ban-sach' },
+      { label: 'Xà bần sạch', href: '/products?search=Xà bần sạch' },
     ],
   },
 ];
@@ -95,7 +95,7 @@ function useOutsideClick(ref, handler) {
 /* ─────────────────────────────────────────────
    Dropdown đơn giản (Sản phẩm VLXD)
 ───────────────────────────────────────────── */
-const SimpleDropdown = ({ label, items, isActive }) => {
+const SimpleDropdown = ({ label, items, isActive, href }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const closeTimer = useRef(null);
@@ -117,18 +117,19 @@ const SimpleDropdown = ({ label, items, isActive }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <button
+      <Link
+        to={href}
         className={`flex items-center gap-1.5 py-1 font-semibold text-sm tracking-wide uppercase transition-all duration-200 border-b-2 ${isActive
           ? 'text-yellow-400 border-yellow-400'
           : 'text-white border-transparent hover:text-yellow-300 hover:border-yellow-300'
           }`}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(false)}
       >
         {label}
         <FaChevronDown
           className={`text-xs transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         />
-      </button>
+      </Link>
 
       {/* Dropdown panel — pt-2 làm "cầu nối" ẩn giữa button và panel */}
       <div
@@ -163,7 +164,7 @@ const SimpleDropdown = ({ label, items, isActive }) => {
 /* ─────────────────────────────────────────────
    Mega Dropdown (Báo Giá)
 ───────────────────────────────────────────── */
-const MegaDropdown = ({ label, columns, isActive }) => {
+const MegaDropdown = ({ label, columns, isActive, href }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const closeTimer = useRef(null);
@@ -185,18 +186,19 @@ const MegaDropdown = ({ label, columns, isActive }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <button
+      <Link
+        to={href}
         className={`flex items-center gap-1.5 py-1 font-semibold text-sm tracking-wide uppercase transition-all duration-200 border-b-2 ${isActive
           ? 'text-yellow-400 border-yellow-400'
           : 'text-white border-transparent hover:text-yellow-300 hover:border-yellow-300'
           }`}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(false)}
       >
         {label}
         <FaChevronDown
           className={`text-xs transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         />
-      </button>
+      </Link>
 
       {/* Mega panel — wrapper có pt-2 làm "cầu nối" ẩn giữa button và panel */}
       <div
@@ -373,12 +375,14 @@ export const HeaderPage = () => {
               label="Sản Phẩm VLXD"
               items={PRODUCTS_SUBMENU}
               isActive={isActive('/products')}
+              href="/products"
             />
 
             <MegaDropdown
               label="Báo Giá"
               columns={PRICE_MEGAMENU}
-              isActive={isActive('/price')}
+              isActive={isActive('/price') || isActive('/products?cat')}
+              href="/price"
             />
 
             <NavLink to="/services" isActive={isActive('/services')}>Dịch Vụ</NavLink>

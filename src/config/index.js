@@ -20,12 +20,17 @@ const APP_CONFIG = {
 
   // Các loại sản phẩm VLXD (Khớp với dữ liệu bạn sẽ nhập)
   PRODUCT_CATEGORIES: [
-    { value: 'cat_san_lap', label: 'Cát xây dựng / Cát san lấp' },
-    { value: 'da_xay_dung', label: 'Đá xây dựng (1x2, 4x6, mi...)' },
-    { value: 'xi_mang', label: 'Xi măng' },
-    { value: 'sat_thep', label: 'Sắt thép các loại' },
-    { value: 'gach_ngoi', label: 'Gạch, ngói' },
-    { value: 'khac', label: 'Vật liệu khác' }
+    { value: 'sat-thep', label: 'Sắt Thép Xây Dựng' },
+    { value: 'cat-da-dong-bao', label: 'Cát Đá Đóng Bao' },
+    { value: 'cat-xay-dung', label: 'Cát Xây Dựng / Cát San Lấp' },
+    { value: 'gach-tuynel', label: 'Gạch Tuynel / Gạch Ngói' },
+    { value: 'da-xay-dung', label: 'Đá Xây Dựng' },
+    { value: 'xi-mang', label: 'Xi Măng' },
+    { value: 'day-kem-dinh', label: 'Dây Kẽm & Đinh' },
+    { value: 'luoi-thep', label: 'Lưới Thép' },
+    { value: 'thep-hinh', label: 'Thép Hình' },
+    { value: 'thep-hop', label: 'Thép Hộp' },
+    { value: 'khac', label: 'Vật Liệu Khác' }
   ],
 
   // Trạng thái đơn hàng (Khớp chính xác với model Order trong FastAPI)

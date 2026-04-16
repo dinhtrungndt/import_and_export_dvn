@@ -13,6 +13,7 @@ export const Routers = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<ProductsPage />} />
+        <Route path="/price" element={<ProductsPage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/order-history" element={<OrderHistoryPage />} />
         <Route path="/cart" element={<CartPage />} />

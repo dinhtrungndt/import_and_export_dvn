@@ -20,51 +20,60 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const PRODUCTS_SUBMENU = [
-  { label: 'Sắt Thép Xây Dựng', href: '/products?cat=sat-thep' },
-  { label: 'Cát Đá Đóng Bao', href: '/products?cat=cat-da-dong-bao' },
-  { label: 'Cát Xây Dựng', href: '/products?cat=cat-xay-dung' },
-  { label: 'Gạch Tuynel', href: '/products?cat=gach-tuynel' },
-  { label: 'Đá Xây Dựng', href: '/products?cat=da-xay-dung' },
-  { label: 'Xi Măng', href: '/products?cat=xi-mang' },
-  { label: 'Dây Kẽm & Đinh', href: '/products?cat=day-kem-dinh' },
-  { label: 'Lưới Thép', href: '/products?cat=luoi-thep' },
-  { label: 'Thép Hình', href: '/products?cat=thep-hinh' },
-  { label: 'Thép Hộp', href: '/products?cat=thep-hop' },
+  { label: 'Sắt Thép Xây Dựng', href: '/products?category=sat-thep' },
+  { label: 'Cát Đá Đóng Bao', href: '/products?category=cat-da-dong-bao' },
+  { label: 'Cát Xây Dựng', href: '/products?category=cat-xay-dung' },
+  { label: 'Gạch Tuynel', href: '/products?category=gach-tuynel' },
+  { label: 'Đá Xây Dựng', href: '/products?category=da-xay-dung' },
+  { label: 'Xi Măng', href: '/products?category=xi-mang' },
+  { label: 'Dây Kẽm & Đinh', href: '/products?category=day-kem-dinh' },
+  { label: 'Lưới Thép', href: '/products?category=luoi-thep' },
+  { label: 'Thép Hình', href: '/products?category=thep-hinh' },
+  { label: 'Thép Hộp', href: '/products?category=thep-hop' },
 ];
 
 const PRICE_SUBMENU = [
-  { label: 'Đá mi bụi', href: '/products?cat=da-mi-bui' },
-  { label: 'Đá mi sàng', href: '/products?cat=da-mi-sang' },
-  { label: 'Đá 0x4', href: '/products?cat=da-0x4' },
-  { label: 'Đá 1×2', href: '/products?cat=da-1x2' },
-  { label: 'Cát san lấp', href: '/products?cat=cat-san-lap' },
-  { label: 'Cát xây tô', href: '/products?cat=cat-xay-to' },
-  { label: 'Cát bê tông', href: '/products?cat=cat-be-tong' },
-  { label: 'Xi măng Thăng Long', href: '/products?cat=xi-mang-thang-long' },
-  { label: 'Xi măng Nghi Sơn', href: '/products?cat=xi-mang-nghi-son' },
-  { label: 'Xà bần sạch', href: '/products?cat=xa-ban-sach' },
+  { label: 'Đá mi bụi', href: '/products?search=Đá mi bụi' },
+  { label: 'Đá mi sàng', href: '/products?search=Đá mi sàng' },
+  { label: 'Đá 0x4', href: '/products?search=Đá 0x4' },
+  { label: 'Đá 1×2', href: '/products?search=Đá 1x2' },
+  { label: 'Cát san lấp', href: '/products?search=Cát san lấp' },
+  { label: 'Cát xây tô', href: '/products?search=Cát xây tô' },
+  { label: 'Cát bê tông', href: '/products?search=Cát bê tông' },
+  { label: 'Xi măng Thăng Long', href: '/products?search=Xi măng Thăng Long' },
+  { label: 'Xi măng Nghi Sơn', href: '/products?search=Xi măng Nghi Sơn' },
+  { label: 'Xà bần sạch', href: '/products?search=Xà bần sạch' },
 ];
 
 /* ── Accordion Item ── */
-const AccordionItem = ({ icon: Icon, label, children, isChildActive, onClose }) => {
+const AccordionItem = ({ icon: Icon, label, children, isChildActive, onClose, href }) => {
   const [open, setOpen] = useState(isChildActive);
 
   return (
     <div className="border-b border-gray-100">
-      <button
-        className={`flex items-center justify-between w-full px-5 py-3.5 text-sm font-semibold transition-colors ${
+      <div
+        className={`flex items-center justify-between w-full text-sm font-semibold transition-colors ${
           isChildActive ? 'text-blue-700 bg-blue-50' : 'text-gray-700 hover:bg-gray-50'
         }`}
-        onClick={() => setOpen((v) => !v)}
       >
-        <span className="flex items-center gap-3">
+        <Link
+          to={href}
+          onClick={onClose}
+          className="flex items-center gap-3 flex-1 px-5 py-3.5 hover:text-blue-600 transition-colors"
+        >
           <Icon className={isChildActive ? 'text-blue-600' : 'text-gray-400'} />
           {label}
-        </span>
-        <FaChevronDown
-          className={`text-xs text-gray-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
-        />
-      </button>
+        </Link>
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="p-3.5 border-l border-gray-100 hover:bg-gray-100"
+          aria-label="Toggle submenu"
+        >
+          <FaChevronDown
+            className={`text-xs text-gray-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          />
+        </button>
+      </div>
       {open && (
         <div className="bg-gray-50 pb-2">
           {children.map((item) => (
@@ -183,6 +192,7 @@ export const SideBar = ({ toggleMenu, currentPath }) => {
             label="Sản Phẩm VLXD"
             isChildActive={isActive('/products')}
             onClose={toggleMenu}
+            href="/products"
           >
             {PRODUCTS_SUBMENU}
           </AccordionItem>
@@ -190,8 +200,9 @@ export const SideBar = ({ toggleMenu, currentPath }) => {
           <AccordionItem
             icon={FaTags}
             label="Báo Giá"
-            isChildActive={isActive('/price')}
+            isChildActive={isActive('/price') || isActive('/products?category=0')}
             onClose={toggleMenu}
+            href="/price"
           >
             {PRICE_SUBMENU}
           </AccordionItem>

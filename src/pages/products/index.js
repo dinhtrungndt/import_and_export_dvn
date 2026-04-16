@@ -39,6 +39,33 @@ const ProductsPage = () => {
 
   const { products = [], loading = false } = useSelector((state) => state.adminReducer || {});
 
+  // Sync state if URL changes externally (e.g. from header nav links)
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const urlCategory = searchParams.get('category') || 'all';
+    const urlSearch = searchParams.get('search') || '';
+    const urlSort = searchParams.get('sort') || 'createdAt_desc';
+
+    let shouldUpdatePage = false;
+
+    if (urlCategory !== selectedCategory) {
+      setSelectedCategory(urlCategory);
+      shouldUpdatePage = true;
+    }
+    if (urlSearch !== searchTerm) {
+      setSearchTerm(urlSearch);
+      shouldUpdatePage = true;
+    }
+    if (urlSort !== sortOption) {
+      setSortOption(urlSort);
+      shouldUpdatePage = true;
+    }
+    
+    if (shouldUpdatePage) {
+      setCurrentPage(1);
+    }
+  }, [location.search]);
+
   useEffect(() => {
     const apiParams = {};
 
