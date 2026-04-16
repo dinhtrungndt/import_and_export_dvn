@@ -1,17 +1,32 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import CryptoJS from 'crypto-js';
 
 const CartContext = createContext();
+const SECRET_KEY = 'dvnvlxd_cart_obfuscation_key_2026';
 
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
     const saved = localStorage.getItem('dvn_cart');
-    return saved ? JSON.parse(saved) : [];
+    if (saved) {
+      if (saved.startsWith('[')) {
+        try { return JSON.parse(saved); } catch (e) { return []; }
+      }
+      try {
+        const bytes = CryptoJS.AES.decrypt(saved, SECRET_KEY);
+        const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+        return JSON.parse(decryptedData);
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
   });
 
   useEffect(() => {
-    localStorage.setItem('dvn_cart', JSON.stringify(cartItems));
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(cartItems), SECRET_KEY).toString();
+    localStorage.setItem('dvn_cart', encryptedData);
   }, [cartItems]);
 
   const addToCart = (product, quantity = 1) => {

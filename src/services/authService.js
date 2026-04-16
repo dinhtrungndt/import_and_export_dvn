@@ -1,5 +1,8 @@
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 import { API_CONFIG, AUTH_CONFIG } from '../config';
+
+const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
 
 // Tạo instance axios với config
 const api = axios.create({
@@ -8,7 +11,7 @@ const api = axios.create({
   headers: API_CONFIG.HEADERS
 });
 
-// Đăng ký tài khoản (Dùng /api/v1/auth/register)
+// Đăng ký tài khoản
 export const register = async (userData) => {
   try {
     const response = await api.post('/api/v1/auth/register', userData);
@@ -18,7 +21,7 @@ export const register = async (userData) => {
   }
 };
 
-// Đăng nhập (LƯU Ý: FastAPI yêu cầu URLSearchParams cho OAuth2)
+// Đăng nhập
 export const login = async (username, password) => {
   try {
     const formData = new URLSearchParams();
@@ -32,17 +35,24 @@ export const login = async (username, password) => {
     });
 
     if (response.data && response.data.access_token) {
-      // Lưu token vào localStorage
-      localStorage.setItem(AUTH_CONFIG.TOKEN_KEY, response.data.access_token);
+      // Lưu token vào localStorage (Mã hóa)
+      const encryptedToken = CryptoJS.AES.encrypt(response.data.access_token, SECRET_KEY).toString();
+      localStorage.setItem(AUTH_CONFIG.TOKEN_KEY, encryptedToken);
 
       // Gọi API lấy thông tin user ngay lập tức
       const userResponse = await api.get('/api/v1/auth/me', {
         headers: { 'Authorization': `Bearer ${response.data.access_token}` }
       });
 
-      // Lưu thông tin user
-      localStorage.setItem(AUTH_CONFIG.USER_KEY, JSON.stringify(userResponse.data));
-      return userResponse.data;
+      // Lọc thông tin an toàn, chỉ lưu những gì cần hiển thị UI vào localStorage (Clear F12)
+      const { username, name, email, phone, role } = userResponse.data;
+      const safeUserData = { username, name, email, phone, role };
+
+      // Mã hóa thông tin trước khi lưu (Giấu khỏi F12)
+      const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(safeUserData), SECRET_KEY).toString();
+      localStorage.setItem(AUTH_CONFIG.USER_KEY, encryptedData);
+
+      return safeUserData;
     }
     return response.data;
   } catch (error) {
@@ -60,8 +70,32 @@ export const logout = () => {
 export const getCurrentUser = () => {
   const userStr = localStorage.getItem(AUTH_CONFIG.USER_KEY);
   if (!userStr) return null;
+
+  // Dữ liệu cũ dạng JSON chưa mã hoá
+  if (userStr.startsWith('{')) {
+    try { return JSON.parse(userStr); } catch (e) { return null; }
+  }
+
   try {
-    return JSON.parse(userStr);
+    // Giải mã AES
+    const bytes = CryptoJS.AES.decrypt(userStr, SECRET_KEY);
+    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+    return JSON.parse(decryptedData);
+  } catch (error) {
+    return null;
+  }
+};
+
+// Helper lấy Token đã giải mã
+export const getAccessToken = () => {
+  const tokenStr = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
+  if (!tokenStr) return null;
+
+  if (tokenStr.startsWith('eyJ')) return tokenStr; // Fallback token cũ
+
+  try {
+    const bytes = CryptoJS.AES.decrypt(tokenStr, SECRET_KEY);
+    return bytes.toString(CryptoJS.enc.Utf8);
   } catch (error) {
     return null;
   }
@@ -69,21 +103,27 @@ export const getCurrentUser = () => {
 
 // Kiểm tra token
 export const isTokenValid = () => {
-  const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
-  return !!token;
+  return !!getAccessToken();
 };
 
 // Lấy thông tin user profile từ API
 export const getUserProfile = async () => {
   try {
-    const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
+    const token = getAccessToken();
     if (!token) throw new Error('Không tìm thấy token xác thực');
 
     const response = await api.get('/api/v1/auth/me');
     const currentUser = getCurrentUser();
     if (currentUser) {
       const updatedUser = { ...currentUser, ...response.data };
-      localStorage.setItem(AUTH_CONFIG.USER_KEY, JSON.stringify(updatedUser));
+
+      // Lọc thông tin an toàn
+      const { username, name, email, phone, role } = updatedUser;
+      const safeUserData = { username, name, email, phone, role };
+
+      // Mã hoá trước khi lưu
+      const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(safeUserData), SECRET_KEY).toString();
+      localStorage.setItem(AUTH_CONFIG.USER_KEY, encryptedData);
     }
     return response.data;
   } catch (error) {
@@ -96,7 +136,7 @@ export const getUserProfile = async () => {
 export const setupAxiosInterceptors = () => {
   api.interceptors.request.use(
     config => {
-      const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
+      const token = getAccessToken();
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
       }
