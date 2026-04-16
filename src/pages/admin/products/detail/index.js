@@ -108,7 +108,7 @@ const ProductDetailDialogAdmin = ({ productId, onClose, onProductHidden }) => {
                     <div className="text-gray-500">Giá nhập (Vốn):</div>
                     <div className="font-semibold text-right">{formatPrice(productDetails.import_price)}</div>
                     <div className="text-gray-500">Mã vật liệu:</div>
-                    <div className="font-mono text-xs text-right mt-0.5 text-gray-400 truncate">{productDetails._id?.substring(0, 8).toUpperCase()}</div>
+                    <div className="font-mono text-xs text-right mt-0.5 text-gray-400 truncate">{productDetails.id?.substring(0, 8).toUpperCase()}</div>
                   </div>
                 </div>
 

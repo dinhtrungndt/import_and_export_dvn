@@ -76,7 +76,7 @@ const adminReducer = (state = initialState, action) => {
         case FETCH_PRODUCTS_HIDDEN:
             return { ...state, hiddenProducts: action.payload, hiddenProductsLoading: false, hiddenProductsError: null };
         case HIDE_PRODUCT:
-            return { ...state, products: state.products.filter(p => p._id !== action.payload), productDetailsLoading: false, productDetailsError: null };
+            return { ...state, products: state.products.filter(p => p.id !== action.payload), productDetailsLoading: false, productDetailsError: null };
         case HIDE_PRODUCT_ERROR:
             return { ...state, productDetailsLoading: false, productDetailsError: action.payload };
         case 'RESET_PRODUCT_SUCCESS':
@@ -84,8 +84,8 @@ const adminReducer = (state = initialState, action) => {
         case RESTORE_PRODUCT:
             return {
                 ...state,
-                hiddenProducts: state.hiddenProducts.filter((p) => p._id !== action.payload._id),
-                products: state.products.map((p) => p._id === action.payload._id ? { ...p, isHidden: false } : p),
+                hiddenProducts: state.hiddenProducts.filter((p) => p.id !== action.payload.id),
+                products: state.products.map((p) => p.id === action.payload.id ? { ...p, isHidden: false } : p),
                 loading: false, error: null,
             };
         case 'SET_RESTORING_PRODUCT':
@@ -97,11 +97,11 @@ const adminReducer = (state = initialState, action) => {
         case CREATE_PRODUCT_ERROR:
             return { ...state, loading: false, error: action.payload };
         case UPDATE_PRODUCT:
-            return { ...state, products: state.products.map(p => p._id === action.payload._id ? action.payload : p), loading: false, error: null };
+            return { ...state, products: state.products.map(p => p.id === action.payload.id ? action.payload : p), loading: false, error: null };
         case UPDATE_PRODUCT_ERROR:
             return { ...state, loading: false, error: action.payload };
         case DELETE_PRODUCT:
-            return { ...state, products: state.products.filter(p => p._id !== action.payload.id), loading: false, error: null };
+            return { ...state, products: state.products.filter(p => p.id !== action.payload.id), loading: false, error: null };
         case DELETE_PRODUCT_ERROR:
             return { ...state, loading: false, error: action.payload };
 
@@ -123,7 +123,7 @@ const adminReducer = (state = initialState, action) => {
         case FETCH_ALL_ORDERS_ERROR:
             return { ...state, loading: false, error: action.payload };
         case UPDATE_ORDER_STATUS:
-            return { ...state, orders: state.orders.map(o => o._id === action.payload._id ? action.payload : o), loading: false, error: null };
+            return { ...state, orders: state.orders.map(o => o.id === action.payload.id ? action.payload : o), loading: false, error: null };
         case UPDATE_ORDER_STATUS_ERROR:
             return { ...state, loading: false, error: action.payload };
 

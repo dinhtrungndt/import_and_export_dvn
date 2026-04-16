@@ -181,7 +181,7 @@ const InventoryReport = () => {
                   <tr><td colSpan="7" className="text-center py-4 text-gray-500">Không có vật liệu nào bị ẩn</td></tr>
                 ) : (
                   filteredHiddenProducts.map((product) => (
-                    <tr key={product._id} className="bg-gray-50">
+                    <tr key={product.id} className="bg-gray-50">
                       <td className="px-4 py-3 text-sm font-medium text-gray-900">{product.name}</td>
                       <td className="px-4 py-3"><span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">{getCategoryLabel(product.category)}</span></td>
                       <td className="px-4 py-3 text-sm text-gray-500">{formatCurrency(product.import_price || product.price)}</td>
@@ -189,8 +189,8 @@ const InventoryReport = () => {
                       <td className="px-4 py-3 text-sm text-gray-500">{formatCurrency((product.import_price || product.price) * product.stock)}</td>
                       <td className="px-4 py-3"><span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Đã ẩn</span></td>
                       <td className="px-4 py-3">
-                        <button onClick={() => handleRestoreProduct(product._id)} disabled={restoringProductId === product._id} className="text-green-600 flex items-center hover:underline">
-                          {restoringProductId === product._id ? <FaSpinner className="animate-spin mr-1" /> : <FaEye className="mr-1" />} Khôi phục
+                        <button onClick={() => handleRestoreProduct(product.id)} disabled={restoringProductId === product.id} className="text-green-600 flex items-center hover:underline">
+                          {restoringProductId === product.id ? <FaSpinner className="animate-spin mr-1" /> : <FaEye className="mr-1" />} Khôi phục
                         </button>
                       </td>
                     </tr>
@@ -200,7 +200,7 @@ const InventoryReport = () => {
                 <tr><td colSpan="6" className="text-center py-4 text-gray-500">Không tìm thấy vật liệu nào</td></tr>
               ) : (
                 filteredProducts.map((product) => (
-                  <tr key={product._id} className="hover:bg-gray-50 transition">
+                  <tr key={product.id} className="hover:bg-gray-50 transition">
                     <td className="px-4 py-3 text-sm font-medium text-gray-900">{product.name}</td>
                     <td className="px-4 py-3"><span className="px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-700 border border-blue-100">{getCategoryLabel(product.category)}</span></td>
                     <td className="px-4 py-3 text-sm text-gray-500">{formatCurrency(product.import_price || product.price)}</td>

@@ -243,7 +243,7 @@ const Dashboard = () => {
             <ul className="divide-y divide-gray-200">
               {dashboard.topProducts && dashboard.topProducts.length > 0 ? (
                 dashboard.topProducts.map((product, index) => (
-                  <li key={product._id} className="py-3 flex items-center justify-between">
+                  <li key={product.id} className="py-3 flex items-center justify-between">
                     <div className="flex items-center">
                       <span className={`flex-shrink-0 h-8 w-8 rounded-full bg-${index < 3 ? ['blue', 'green', 'yellow'][index] : 'gray'}-100 flex items-center justify-center mr-3`}>
                         <span className={`text-${index < 3 ? ['blue', 'green', 'yellow'][index] : 'gray'}-600 font-medium`}>{index + 1}</span>

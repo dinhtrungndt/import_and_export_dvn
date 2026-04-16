@@ -43,7 +43,7 @@ const AccountPage = () => {
     try {
       setLoading(true);
       // NOTE: Bạn cần tạo API endpoint trong FastAPI để update user profile
-      // await updateProfile(user._id, formData);
+      // await updateProfile(user.id, formData);
 
       // Tạm thời giả lập thành công và update local state
       updateUser(formData);

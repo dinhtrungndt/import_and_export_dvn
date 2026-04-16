@@ -132,7 +132,7 @@ const CostsMana = () => {
         await dispatch(createExpense(data));
         toast.success('Thêm khoản chi thành công!');
       } else {
-        await dispatch(updateExpense(selectedExpense._id, data));
+        await dispatch(updateExpense(selectedExpense.id, data));
         toast.success('Cập nhật thành công!');
       }
       handleCloseForm();
@@ -225,7 +225,7 @@ const CostsMana = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {currentItems.map((item) => (
-                <tr key={item._id} className="hover:bg-gray-50">
+                <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(item.date)}</td>
                   <td className="px-6 py-4 text-sm font-medium text-gray-900">{item.title}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs">{getCategoryLabel(item.category)}</span></td>

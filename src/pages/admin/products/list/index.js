@@ -265,7 +265,7 @@ const AdminProductsPage = () => {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
               {currentItems.map((product) => (
-                <div key={product._id} onClick={(e) => handleEditProduct(product._id, e)} className="bg-white rounded-lg shadow overflow-hidden cursor-pointer hover:shadow-md transition-all relative">
+                <div key={product.id} onClick={(e) => handleEditProduct(product.id, e)} className="bg-white rounded-lg shadow overflow-hidden cursor-pointer hover:shadow-md transition-all relative">
                   <div className="relative">
                     <img
                       src={product.image || `https://ui-avatars.com/api/?background=EBF4FF&color=4F46E5&bold=true&name=${encodeURIComponent(product.name)}`}
@@ -292,20 +292,20 @@ const AdminProductsPage = () => {
                   </div>
 
                   <div className="relative">
-                    <button onClick={(e) => toggleActionMenu(product._id, e)} className="absolute bottom-2 right-2 p-1.5 rounded-full text-gray-400 hover:bg-gray-100 bg-white shadow-sm">
+                    <button onClick={(e) => toggleActionMenu(product.id, e)} className="absolute bottom-2 right-2 p-1.5 rounded-full text-gray-400 hover:bg-gray-100 bg-white shadow-sm">
                       <FaEllipsisV size={14} />
                     </button>
-                    {activeActionMenu === product._id && (
+                    {activeActionMenu === product.id && (
                       <div className="absolute right-2 bottom-full mb-1 w-36 bg-white rounded-md shadow-lg z-10 py-1 border border-gray-100">
-                        <button onClick={(e) => handleViewProduct(product._id, e)} className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                        <button onClick={(e) => handleViewProduct(product.id, e)} className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center">
                           <FaEye className="mr-2 text-blue-500" /> Xem chi tiết
                         </button>
-                        <button onClick={(e) => handleEditProduct(product._id, e)} className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                        <button onClick={(e) => handleEditProduct(product.id, e)} className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center">
                           <FaEdit className="mr-2 text-indigo-500" /> Chỉnh sửa
                         </button>
-                        <button onClick={(e) => handleHideProduct(product._id, e)} className={`w-full px-3 py-2 text-left text-sm flex items-center ${confirmHide === product._id ? 'text-red-700 bg-red-50' : 'text-gray-700 hover:bg-gray-100'}`}>
-                          {isProcessing && confirmHide === product._id ? <FaSpinner className="animate-spin mr-2 text-red-500" /> : <FaEyeSlash className="mr-2 text-red-500" />}
-                          {confirmHide === product._id ? 'Xác nhận ẩn?' : 'Ẩn VLXD'}
+                        <button onClick={(e) => handleHideProduct(product.id, e)} className={`w-full px-3 py-2 text-left text-sm flex items-center ${confirmHide === product.id ? 'text-red-700 bg-red-50' : 'text-gray-700 hover:bg-gray-100'}`}>
+                          {isProcessing && confirmHide === product.id ? <FaSpinner className="animate-spin mr-2 text-red-500" /> : <FaEyeSlash className="mr-2 text-red-500" />}
+                          {confirmHide === product.id ? 'Xác nhận ẩn?' : 'Ẩn VLXD'}
                         </button>
                       </div>
                     )}

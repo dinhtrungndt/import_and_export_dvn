@@ -146,7 +146,7 @@ const ExportReport = () => {
                 <tr><td colSpan="5" className="text-center py-4 text-gray-500">Không tìm thấy giao dịch nào</td></tr>
               ) : (
                 filteredTransactions.map((tx) => (
-                  <tr key={tx._id} className="hover:bg-gray-50">
+                  <tr key={tx.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 text-sm font-medium text-gray-900">{tx.productName}</td>
                     <td className="px-4 py-3"><span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">{getCategoryLabel(tx.category)}</span></td>
                     <td className="px-4 py-3 text-sm font-bold text-gray-700">{tx.quantity} {tx.unit}</td>
