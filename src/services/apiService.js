@@ -84,16 +84,70 @@ export const ReportService = {
     return response.data;
   },
   getRevenueReport: async (params = {}) => {
-    const response = await apiClient.get('/api/v1/reports/revenue', { params });
+    const backendParams = {};
+    if (params.startDate) backendParams.start_date = params.startDate;
+    if (params.endDate) backendParams.end_date = params.endDate;
+    if (params.interval) backendParams.interval = params.interval;
+    const response = await apiClient.get('/api/v1/reports/revenue', { params: backendParams });
     return response.data;
   },
   getExportReport: async (params = {}) => {
-    const response = await apiClient.get('/api/v1/reports/export', { params });
-    return response.data;
+    const backendParams = { type: 'export' };
+    if (params.startDate) backendParams.start_date = params.startDate;
+    if (params.endDate) backendParams.end_date = params.endDate;
+    if (params.category) backendParams.category = params.category;
+    const response = await apiClient.get('/api/v1/inventory/transactions', { params: backendParams });
+    const transactions = response.data || [];
+    const summary = {
+      totalExports: transactions.length,
+      totalQuantity: transactions.reduce((sum, t) => sum + (t.quantity || 0), 0),
+      totalValue: 0
+    };
+    return { summary, transactions: [], categoryStats: {} };
   },
   getExpenseReport: async (params = {}) => {
-    const response = await apiClient.get('/api/v1/reports/expenses', { params });
-    return response.data;
+    const response = await apiClient.get('/api/v1/expenses/', {});
+    const expenses = response.data || [];
+
+    // Filter theo ngày nếu có
+    let filtered = expenses;
+    if (params.from) {
+      const fromDate = new Date(params.from);
+      filtered = filtered.filter(e => new Date(e.date) >= fromDate);
+    }
+    if (params.to) {
+      const toDate = new Date(params.to);
+      toDate.setHours(23, 59, 59);
+      filtered = filtered.filter(e => new Date(e.date) <= toDate);
+    }
+
+    // Group by category
+    const groupedByCategory = {};
+    filtered.forEach(e => {
+      const cat = e.category || 'khac';
+      if (!groupedByCategory[cat]) groupedByCategory[cat] = { totalAmount: 0, count: 0 };
+      groupedByCategory[cat].totalAmount += e.amount;
+      groupedByCategory[cat].count += 1;
+    });
+
+    // Group by time
+    const groupedByTime = {};
+    filtered.forEach(e => {
+      const d = new Date(e.date);
+      const key = params.groupBy === 'day'
+        ? d.toISOString().split('T')[0]
+        : `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      if (!groupedByTime[key]) groupedByTime[key] = { totalAmount: 0, count: 0 };
+      groupedByTime[key].totalAmount += e.amount;
+      groupedByTime[key].count += 1;
+    });
+
+    const totalAmount = filtered.reduce((sum, e) => sum + e.amount, 0);
+    return {
+      total: { amount: totalAmount, count: filtered.length },
+      groupedByCategory,
+      groupedByTime
+    };
   }
 };
 
@@ -109,8 +163,9 @@ export const ExpenseService = {
     return response.data;
   },
   getHiddenExpenses: async (params = {}) => {
-    const response = await apiClient.get('/api/v1/expenses/hidden', { params });
-    return response.data;
+    // Backend không có /expenses/hidden, trả về mảng rỗng
+    // Chi phí ẩn được xử lý qua PUT /{id}/hide, không có endpoint lấy danh sách
+    return [];
   },
   updateExpense: async (id, data) => {
     const response = await apiClient.put(`/api/v1/expenses/${id}`, data, {
@@ -142,4 +197,3 @@ export const PostService = {
     return response.data;
   }
 };
-
