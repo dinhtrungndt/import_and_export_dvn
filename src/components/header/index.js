@@ -14,7 +14,7 @@ import {
   FaTrashAlt,
   FaUser
 } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
@@ -277,6 +277,8 @@ const NavLink = ({ to, children, isActive }) => (
 ───────────────────────────────────────────── */
 export const HeaderPage = () => {
   const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.adminReducer || {});
+  const [searchResults, setSearchResults] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -296,6 +298,45 @@ export const HeaderPage = () => {
   const { cartItems, cartCount, cartTotal, removeFromCart } = useCart();
 
   const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+
+  useEffect(() => {
+    if (searchQuery.trim().length >= 2 && products?.length > 0) {
+      const query = searchQuery.toLowerCase();
+      const removeAccents = (str) =>
+        str ? str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() : '';
+      const noAccentQuery = removeAccents(query);
+
+      const matched = products
+        .filter((p) => {
+          const nameLower = p.name ? p.name.toLowerCase() : '';
+          return nameLower.includes(query) || removeAccents(nameLower).includes(noAccentQuery);
+        })
+        .slice(0, 6);
+      setSearchResults(matched);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery, products]);
+
+  const HighlightText = ({ text, highlight }) => {
+    if (!highlight.trim() || !text) return <>{text}</>;
+    const escapedHighlight = highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escapedHighlight})`, 'gi');
+    const parts = text.split(regex);
+    return (
+      <span>
+        {parts.map((part, i) =>
+          part.toLowerCase() === highlight.toLowerCase() ? (
+            <span key={i} className="bg-yellow-200 text-blue-700 font-bold px-0.5 rounded-sm">
+              {part}
+            </span>
+          ) : (
+            <span key={i}>{part}</span>
+          )
+        )}
+      </span>
+    );
+  };
 
   useOutsideClick(profileRef, () => setIsProfileDropdownOpen(false));
   useOutsideClick(cartRef, () => setIsCartDropdownOpen(false));
@@ -619,20 +660,57 @@ export const HeaderPage = () => {
           <div className="absolute inset-0 bg-slate-50/50 pointer-events-none"></div>
 
           <form onSubmit={handleSearch} className="relative w-full max-w-4xl mx-auto flex items-center gap-2 lg:gap-4 z-10 h-full py-2">
-            <FaSearch className="hidden sm:block text-slate-400 text-xl absolute left-4 lg:left-5 pointer-events-none z-20" />
-
-            <input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Nhập tên vật liệu, danh mục (VD: Cát xây tô, Thép hộp)..."
-              className="w-full h-full bg-slate-50 border border-slate-200 focus:border-blue-400 text-slate-800 placeholder-slate-400 rounded-xl py-0 pl-4 sm:pl-12 pr-4 text-sm sm:text-base focus:outline-none focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            
+            <div className="relative w-full h-full flex-1">
+              <FaSearch className="hidden sm:block text-slate-400 text-xl absolute top-1/2 -translate-y-1/2 left-4 lg:left-5 pointer-events-none z-20" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Nhập tên vật liệu, danh mục (VD: Cát xây tô, Thép hộp)..."
+                className="w-full h-full bg-slate-50 border border-slate-200 focus:border-blue-400 text-slate-800 placeholder-slate-400 rounded-xl py-0 pl-4 sm:pl-12 pr-4 text-sm sm:text-base focus:outline-none focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              
+              {/* Auto suggest Dropdown Kết quả */}
+              {searchQuery.trim().length >= 2 && isSearchActive && (
+                 <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white rounded-xl shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden z-[70]">
+                    {searchResults.length > 0 ? (
+                       <ul className="divide-y divide-slate-50">
+                         {searchResults.map((item) => (
+                           <li key={item.id} className="hover:bg-blue-50/50 transition">
+                             <Link 
+                               to={`/product/${item.id}`} 
+                               onClick={() => { setIsSearchActive(false); setSearchQuery(''); }}
+                               className="flex items-center gap-3 p-3 sm:p-4"
+                             >
+                                <div className="w-12 h-12 bg-white rounded border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
+                                   <img src={item.image || `https://ui-avatars.com/api/?background=EBF4FF&color=4F46E5&name=${encodeURIComponent(item.name)}`} alt={item.name} className="w-full h-full object-cover" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                   <div className="text-sm font-bold text-slate-800 truncate">
+                                      <HighlightText text={item.name} highlight={searchQuery} />
+                                   </div>
+                                   <div className="text-rose-600 text-[13px] font-bold mt-0.5">
+                                      {formatPrice(item.price)} <span className="text-slate-400 font-normal text-[11px] ml-0.5">/ {item.unit}</span>
+                                   </div>
+                                </div>
+                             </Link>
+                           </li>
+                         ))}
+                       </ul>
+                    ) : (
+                       <div className="p-6 text-center text-slate-500 text-sm">
+                          Không tìm thấy sản phẩm nào phù hợp với <strong className="text-slate-800">"{searchQuery}"</strong>
+                       </div>
+                    )}
+                 </div>
+              )}
+            </div>
 
             <button
               type="submit"
-              className="h-full px-5 lg:px-8 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-transform hover:scale-[1.02] whitespace-nowrap hidden sm:block shadow-sm"
+              className="h-full px-5 lg:px-8 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-transform hover:scale-[1.02] whitespace-nowrap hidden sm:block shadow-sm shrink-0"
             >
               Tìm Kiếm
             </button>
