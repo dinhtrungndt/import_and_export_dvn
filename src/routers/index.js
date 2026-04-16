@@ -100,6 +100,11 @@ export const Routers = () => {
             <Route index element={<PostsPage />} />
             <Route path=":slug" element={<PostDetailPage />} />
           </Route>
+          
+          <Route path="/dich-vu" element={<PrivateRoute />}>
+            <Route index element={<PostsPage />} />
+            <Route path=":slug" element={<PostDetailPage />} />
+          </Route>
         </Route>
 
         {/* Admin Routes with AdminLayout (Cho Admin và Manager) */}

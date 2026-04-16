@@ -387,7 +387,7 @@ export const HeaderPage = () => {
               href="/bao-gia"
             />
 
-            <NavLink to="/services" isActive={isActive('/services')}>Dịch Vụ</NavLink>
+            <NavLink to="/dich-vu" isActive={isActive('/dich-vu')}>Dịch Vụ</NavLink>
 
             <NavLink to="/tin-tuc" isActive={isActive('/tin-tuc')}>Tin Tức</NavLink>
 

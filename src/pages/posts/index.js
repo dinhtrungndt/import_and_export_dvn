@@ -13,9 +13,16 @@ const PostsPage = () => {
   const ITEMS_PER_PAGE = 22;
 
   // Determine post type based on the path
-  const isQuotation = location.pathname.includes('bao-gia');
-  const postType = isQuotation ? 'bao-gia' : 'tin-tuc';
-  const pageTitle = isQuotation ? 'Bảng Báo Giá VLXD' : 'Tin Tức Nội Bộ';
+  let postType = 'tin-tuc';
+  let pageTitle = 'Tin Tức Nội Bộ';
+
+  if (location.pathname.includes('bao-gia')) {
+    postType = 'bao-gia';
+    pageTitle = 'Bảng Báo Giá VLXD';
+  } else if (location.pathname.includes('dich-vu')) {
+    postType = 'dich-vu';
+    pageTitle = 'Dịch Vụ Thi Công & Cho Thuê';
+  }
 
   // Reset page when switching between category
   useEffect(() => {

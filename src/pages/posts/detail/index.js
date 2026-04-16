@@ -11,10 +11,19 @@ const PostDetailPage = () => {
   const [error, setError] = useState(null);
   const [recentPosts, setRecentPosts] = useState([]);
 
-  const isQuotation = location.pathname.includes('bao-gia');
-  const postType = isQuotation ? 'bao-gia' : 'tin-tuc';
-  const categoryName = isQuotation ? 'Bảng Báo Giá VLXD' : 'Tin Tức Nội Bộ';
-  const categoryLink = isQuotation ? '/bao-gia' : '/tin-tuc';
+  let postType = 'tin-tuc';
+  let categoryName = 'Tin Tức Nội Bộ';
+  let categoryLink = '/tin-tuc';
+
+  if (location.pathname.includes('bao-gia')) {
+    postType = 'bao-gia';
+    categoryName = 'Bảng Báo Giá VLXD';
+    categoryLink = '/bao-gia';
+  } else if (location.pathname.includes('dich-vu')) {
+    postType = 'dich-vu';
+    categoryName = 'Dịch Vụ Thi Công & Cho Thuê';
+    categoryLink = '/dich-vu';
+  }
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -72,6 +81,43 @@ const PostDetailPage = () => {
     );
   }
 
+  // Extract TOC and modify HTML to add IDs
+  const processContent = (htmlContent) => {
+    if (!htmlContent) return { html: '', toc: [] };
+    
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    
+    const toc = [];
+    const headings = doc.querySelectorAll('h2, h3');
+    
+    headings.forEach((heading, index) => {
+      const id = `heading-${index}`;
+      heading.id = id;
+      toc.push({
+        id,
+        text: heading.textContent || heading.innerText,
+        level: heading.tagName.toLowerCase() === 'h2' ? 2 : 3
+      });
+    });
+    
+    return {
+      html: doc.body.innerHTML,
+      toc
+    };
+  };
+
+  const { html: processedHtml, toc } = post ? processContent(post.content) : { html: '', toc: [] };
+
+  const scrollToHeading = (e, id) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const y = element.getBoundingClientRect().top + window.scrollY - 100; // offset for fixed header if any
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="bg-[#f8f9fa] min-h-screen py-5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -107,19 +153,56 @@ const PostDetailPage = () => {
               </div>
             </div>
 
+            {/* Thumbnail */}
+            {post.thumbnail && (
+              <figure className="mb-8 rounded-xl overflow-hidden shadow-sm aspect-[16/9] sm:aspect-[21/9] bg-gray-100">
+                <img 
+                  src={post.thumbnail} 
+                  alt={post.title} 
+                  className="w-full h-full object-cover"
+                />
+              </figure>
+            )}
+
+            {/* Table of Contents */}
+            {toc.length > 0 && (
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-8">
+                <h3 className="font-bold text-gray-800 mb-3 text-base flex items-center gap-2">
+                  <span className="w-1.5 h-5 bg-blue-600 rounded-full inline-block"></span>
+                  Nội dung chính:
+                </h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  {toc.map((item) => (
+                    <li 
+                      key={item.id} 
+                      className={`${item.level === 3 ? 'pl-4 border-l-2 border-gray-200 ml-1' : 'pl-1'}`}
+                    >
+                      <a 
+                        href={`#${item.id}`} 
+                        onClick={(e) => scrollToHeading(e, item.id)}
+                        className="hover:text-blue-600 transition-colors inline-block py-0.5"
+                      >
+                        {item.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {/* Content Formatting */}
-            <div
+            <div 
               className="prose prose-sm md:prose-base max-w-none text-gray-700
                 prose-headings:text-gray-800 prose-headings:font-bold
-                prose-h2:text-xl prose-h2:mt-6 prose-h2:mb-3
-                prose-h3:text-lg prose-h3:mt-5 prose-h3:mb-2
+                prose-h2:text-xl prose-h2:mt-6 prose-h2:mb-3 prose-h2:scroll-mt-24
+                prose-h3:text-lg prose-h3:mt-5 prose-h3:mb-2 prose-h3:scroll-mt-24
                 prose-p:leading-relaxed prose-p:mb-4
                 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-                prose-img:rounded-lg prose-img:shadow-sm prose-img:max-h-96 prose-img:object-cover prose-img:w-full
+                prose-img:rounded-lg prose-img:shadow-sm prose-img:max-h-[500px] prose-img:object-cover prose-img:w-full prose-img:mx-auto
                 prose-ul:list-disc prose-ul:pl-5
                 prose-ol:list-decimal prose-ol:pl-5
-                prose-table:border-collapse prose-th:border prose-th:bg-gray-50 prose-th:p-2 prose-th:text-xs prose-td:border prose-td:p-2 prose-td:text-sm"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+                prose-table:border-collapse prose-table:w-full prose-th:border prose-th:bg-gray-50 prose-th:p-2 prose-th:text-xs prose-td:border prose-td:p-2 prose-td:text-sm"
+              dangerouslySetInnerHTML={{ __html: processedHtml }}
             />
           </article>
 
