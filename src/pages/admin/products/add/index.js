@@ -16,9 +16,9 @@ const AddProducts = () => {
   // Cập nhật State cho VLXD (Thay weight bằng unit, bỏ featured/canBeGift)
   const [formData, setFormData] = useState({
     name: '',
-    category: 'cat-san-lap',
+    category: 'sat-thep',
     sub_category: '',
-    unit: 'Khối',
+    unit: 'Kg',
     importPrice: '',
     price: '',
     description: '',
@@ -33,9 +33,9 @@ const AddProducts = () => {
       setTimeout(() => {
         setFormData({
           name: '',
-          category: 'cat-san-lap',
+          category: 'sat-thep',
           sub_category: '',
-          unit: 'Khối',
+          unit: 'Kg',
           importPrice: '',
           price: '',
           description: '',
@@ -170,7 +170,10 @@ const AddProducts = () => {
                   id="category"
                   name="category"
                   value={formData.category}
-                  onChange={handleInputChange}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                    setFormData(prev => ({ ...prev, category: e.target.value, sub_category: '' }));
+                  }}
                   className="w-full border border-gray-300 rounded-lg py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   required
                 >
@@ -193,17 +196,33 @@ const AddProducts = () => {
                   className="w-full border border-gray-300 rounded-lg py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   required
                 >
-                  <option value="Khối">Khối (m3)</option>
-                  <option value="Bao">Bao</option>
-                  <option value="Kg">Kg</option>
-                  <option value="Tấn">Tấn</option>
-                  <option value="Viên">Viên</option>
-                  <option value="Cây">Cây (Sắt thép)</option>
-                  <option value="Cuộn">Cuộn</option>
-                  <option value="Cái">Cái</option>
+                  {APP_CONFIG.PRODUCT_UNITS.map(u => (
+                    <option key={u} value={u}>{u}</option>
+                  ))}
                 </select>
               </div>
             </div>
+
+            {/* Sub-category động theo category */}
+            {APP_CONFIG.SUB_CATEGORIES[formData.category]?.length > 0 && (
+              <div className="form-group">
+                <label htmlFor="sub_category" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+                  <FaLayerGroup className="mr-2 text-indigo-500" /> Phân loại chi tiết
+                </label>
+                <select
+                  id="sub_category"
+                  name="sub_category"
+                  value={formData.sub_category}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-lg py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
+                >
+                  <option value="">-- Chọn phân loại (tùy chọn) --</option>
+                  {APP_CONFIG.SUB_CATEGORIES[formData.category].map((sub) => (
+                    <option key={sub} value={sub}>{sub}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-4">
               <div className="form-group">
