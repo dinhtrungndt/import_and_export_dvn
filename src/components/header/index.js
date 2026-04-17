@@ -3,8 +3,7 @@ import {
   FaBars,
   FaChartLine,
   FaChevronDown,
-  FaClipboardList,
-  FaHardHat,
+  FaClipboardList, FaEnvelope, FaHardHat,
   FaPhone,
   FaSearch,
   FaShoppingBag,
@@ -12,76 +11,15 @@ import {
   FaSignOutAlt,
   FaTimes,
   FaTrashAlt,
-  FaUser,
-  FaEnvelope
+  FaUser
 } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
+import { PRICE_MEGAMENU, PRODUCTS_SUBMENU } from '../../data/navigation';
 import { fetchProducts } from '../../stores/redux/actions/adminActions.js';
 import { SideBar } from '../sidebar';
-
-/* ─────────────────────────────────────────────
-   Dữ liệu menu
-───────────────────────────────────────────── */
-const PRODUCTS_SUBMENU = [
-  { label: 'Sắt Thép Xây Dựng', href: '/products?category=sat-thep' },
-  { label: 'Cát Đá Đóng Bao', href: '/products?category=cat-da-dong-bao' },
-  { label: 'Cát Xây Dựng', href: '/products?category=cat-xay-dung' },
-  { label: 'Gạch Tuynel', href: '/products?category=gach-tuynel' },
-  { label: 'Đá Xây Dựng', href: '/products?category=da-xay-dung' },
-  { label: 'Xi Măng', href: '/products?category=xi-mang' },
-  { label: 'Dây Kẽm & Đinh', href: '/products?category=day-kem-dinh' },
-  { label: 'Lưới Thép', href: '/products?category=luoi-thep' },
-  { label: 'Thép Hình', href: '/products?category=thep-hinh' },
-  { label: 'Thép Hộp', href: '/products?category=thep-hop' },
-];
-
-const PRICE_MEGAMENU = [
-  {
-    title: 'Báo giá Đá',
-    href: '/bao-gia',
-    items: [
-      { label: 'Đá mi bụi', href: '/bao-gia/bao-gia-da-mi-bui' },
-      { label: 'Đá mi sàng', href: '/bao-gia/bao-gia-da-mi-sang' },
-      { label: 'Đá 0x4', href: '/bao-gia/bao-gia-da-0x4' },
-      { label: 'Đá 1×2', href: '/bao-gia/bao-gia-da-1x2' },
-      { label: 'Đá 4×6', href: '/bao-gia/bao-gia-da-4x6' },
-      { label: 'Đá hộc', href: '/bao-gia/bao-gia-da-hoc' },
-      { label: 'Đá cấp phối dmax 25', href: '/bao-gia/bao-gia-da-cap-phoi' },
-    ],
-  },
-  {
-    title: 'Báo giá Cát',
-    href: '/bao-gia/bao-gia-cat-da-dong-bao-quan-11',
-    items: [
-      { label: 'Cát san lấp', href: '/bao-gia/bao-gia-cat-san-lap' },
-      { label: 'Cát xây tô', href: '/bao-gia/bao-gia-cat-xay-to' },
-      { label: 'Cát bê tông', href: '/bao-gia/bao-gia-cat-be-tong' },
-    ],
-  },
-  {
-    title: 'Báo giá Xi Măng',
-    href: '/bao-gia/bao-gia-xi-mang-xay-dung-moi-nhat',
-    items: [
-      { label: 'Xi măng Thăng Long', href: '/bao-gia/bao-gia-xi-mang-thang-long' },
-      { label: 'Xi măng Nghi Sơn', href: '/bao-gia/bao-gia-xi-mang-nghi-son' },
-      { label: 'Xi măng INSEE', href: '/bao-gia/bao-gia-xi-mang-insee' },
-      { label: 'Xi măng Hoàng Thạch', href: '/bao-gia/bao-gia-xi-mang-hoang-thach' },
-      { label: 'Xi măng Hà Tiên', href: '/bao-gia/bao-gia-xi-mang-ha-tien' },
-    ],
-  },
-  {
-    title: 'Báo giá VLXD Khác',
-    href: '/bao-gia',
-    items: [
-      { label: 'Xà bần sạch', href: '/bao-gia/bao-gia-xa-ban-sach' },
-      { label: 'Sắt hộp', href: '/bao-gia/bao-gia-sat-hop-quan-tan-binh-uy-tin' },
-      { label: 'Vữa trộn sẵn', href: '/bao-gia/bao-gia-vua-tron-san-2026' }
-    ],
-  },
-];
 
 /* ─────────────────────────────────────────────
    Hook: đóng dropdown khi click ra ngoài
@@ -125,8 +63,8 @@ const SimpleDropdown = ({ label, items, isActive, href }) => {
       <Link
         to={href}
         className={`flex items-center gap-1.5 py-1 font-bold text-[13px] tracking-wider uppercase transition-all duration-300 border-b-2 ${isActive
-            ? 'text-blue-700 border-blue-700'
-            : 'text-slate-600 border-transparent hover:text-blue-600 hover:border-blue-600'
+          ? 'text-blue-700 border-blue-700'
+          : 'text-slate-600 border-transparent hover:text-blue-600 hover:border-blue-600'
           }`}
         onClick={() => setOpen(false)}
       >
@@ -193,8 +131,8 @@ const MegaDropdown = ({ label, columns, isActive, href }) => {
       <Link
         to={href}
         className={`flex items-center gap-1.5 py-1 font-bold text-[13px] tracking-wider uppercase transition-all duration-300 border-b-2 ${isActive
-            ? 'text-blue-700 border-blue-700'
-            : 'text-slate-600 border-transparent hover:text-blue-600 hover:border-blue-600'
+          ? 'text-blue-700 border-blue-700'
+          : 'text-slate-600 border-transparent hover:text-blue-600 hover:border-blue-600'
           }`}
         onClick={() => setOpen(false)}
       >
@@ -265,8 +203,8 @@ const NavLink = ({ to, children, isActive }) => (
   <Link
     to={to}
     className={`h-full flex items-center py-1 font-bold text-[13px] tracking-wider uppercase transition-all duration-300 border-b-2 whitespace-nowrap ${isActive
-        ? 'text-blue-700 border-blue-700'
-        : 'text-slate-600 border-transparent hover:text-blue-600 hover:border-blue-600'
+      ? 'text-blue-700 border-blue-700'
+      : 'text-slate-600 border-transparent hover:text-blue-600 hover:border-blue-600'
       }`}
   >
     {children}
@@ -618,9 +556,9 @@ export const HeaderPage = () => {
                               <div className="text-xs text-slate-500 flex items-center justify-between mt-1">
                                 <span>{formatPrice(item.price)} <span className="text-[10px] text-slate-400">/ {item.unit}</span></span>
                                 <div className="flex items-center border border-slate-200 rounded min-w-[60px] bg-white text-slate-800">
-                                   <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateQuantity(item.id, Math.max(1, item.quantity - 1)); }} className="w-5 h-5 flex items-center justify-center hover:bg-slate-100 text-slate-600 transition">-</button>
-                                   <input title="Số lượng" type="number" onClick={(e) => e.stopPropagation()} onChange={(e) => updateQuantity(item.id, Math.max(1, Number(e.target.value)))} value={item.quantity} className="w-8 text-center font-bold text-slate-700 text-[11px] focus:outline-none appearance-none" style={{MozAppearance: 'textfield'}} />
-                                   <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateQuantity(item.id, item.quantity + 1); }} className="w-5 h-5 flex items-center justify-center hover:bg-slate-100 text-slate-600 transition">+</button>
+                                  <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateQuantity(item.id, Math.max(1, item.quantity - 1)); }} className="w-5 h-5 flex items-center justify-center hover:bg-slate-100 text-slate-600 transition">-</button>
+                                  <input title="Số lượng" type="number" onClick={(e) => e.stopPropagation()} onChange={(e) => updateQuantity(item.id, Math.max(1, Number(e.target.value)))} value={item.quantity} className="w-8 text-center font-bold text-slate-700 text-[11px] focus:outline-none appearance-none" style={{ MozAppearance: 'textfield' }} />
+                                  <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateQuantity(item.id, item.quantity + 1); }} className="w-5 h-5 flex items-center justify-center hover:bg-slate-100 text-slate-600 transition">+</button>
                                 </div>
                               </div>
                               <div className="text-[13px] font-black text-rose-600 mt-1">{formatPrice((item.price || 0) * item.quantity)}</div>
@@ -672,7 +610,7 @@ export const HeaderPage = () => {
           <div className="absolute inset-0 bg-slate-50/50 pointer-events-none"></div>
 
           <form onSubmit={handleSearch} className="relative w-full max-w-4xl mx-auto flex items-center gap-2 lg:gap-4 z-10 h-full py-2">
-            
+
             <div className="relative w-full h-full flex-1">
               <FaSearch className="hidden sm:block text-slate-400 text-xl absolute top-1/2 -translate-y-1/2 left-4 lg:left-5 pointer-events-none z-20" />
               <input
@@ -683,40 +621,40 @@ export const HeaderPage = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              
+
               {/* Auto suggest Dropdown Kết quả */}
               {searchQuery.trim().length >= 2 && isSearchActive && (
-                 <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white rounded-xl shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden z-[70]">
-                    {searchResults.length > 0 ? (
-                       <ul className="divide-y divide-slate-50">
-                         {searchResults.map((item) => (
-                           <li key={item.id} className="hover:bg-blue-50/50 transition">
-                             <Link 
-                               to={`/product/${item.id}`} 
-                               onClick={() => { setIsSearchActive(false); setSearchQuery(''); }}
-                               className="flex items-center gap-3 p-3 sm:p-4"
-                             >
-                                <div className="w-12 h-12 bg-white rounded border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
-                                   <img src={item.image || `https://ui-avatars.com/api/?background=EBF4FF&color=4F46E5&name=${encodeURIComponent(item.name)}`} alt={item.name} className="w-full h-full object-cover" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                   <div className="text-sm font-bold text-slate-800 truncate">
-                                      <HighlightText text={item.name} highlight={searchQuery} />
-                                   </div>
-                                   <div className="text-rose-600 text-[13px] font-bold mt-0.5">
-                                      {formatPrice(item.price)} <span className="text-slate-400 font-normal text-[11px] ml-0.5">/ {item.unit}</span>
-                                   </div>
-                                </div>
-                             </Link>
-                           </li>
-                         ))}
-                       </ul>
-                    ) : (
-                       <div className="p-6 text-center text-slate-500 text-sm">
-                          Không tìm thấy sản phẩm nào phù hợp với <strong className="text-slate-800">"{searchQuery}"</strong>
-                       </div>
-                    )}
-                 </div>
+                <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white rounded-xl shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden z-[70]">
+                  {searchResults.length > 0 ? (
+                    <ul className="divide-y divide-slate-50">
+                      {searchResults.map((item) => (
+                        <li key={item.id} className="hover:bg-blue-50/50 transition">
+                          <Link
+                            to={`/product/${item.id}`}
+                            onClick={() => { setIsSearchActive(false); setSearchQuery(''); }}
+                            className="flex items-center gap-3 p-3 sm:p-4"
+                          >
+                            <div className="w-12 h-12 bg-white rounded border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
+                              <img src={item.image || `https://ui-avatars.com/api/?background=EBF4FF&color=4F46E5&name=${encodeURIComponent(item.name)}`} alt={item.name} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-bold text-slate-800 truncate">
+                                <HighlightText text={item.name} highlight={searchQuery} />
+                              </div>
+                              <div className="text-rose-600 text-[13px] font-bold mt-0.5">
+                                {formatPrice(item.price)} <span className="text-slate-400 font-normal text-[11px] ml-0.5">/ {item.unit}</span>
+                              </div>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="p-6 text-center text-slate-500 text-sm">
+                      Không tìm thấy sản phẩm nào phù hợp với <strong className="text-slate-800">"{searchQuery}"</strong>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
 

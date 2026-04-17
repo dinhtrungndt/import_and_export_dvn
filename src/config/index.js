@@ -60,4 +60,14 @@ const APP_CONFIG = {
   ]
 };
 
-export { API_CONFIG, AUTH_CONFIG, APP_CONFIG };
+// Danh mục chi phí chuẩn cho cửa hàng VLXD (dùng chung ở CostsMana & ExpenseReport)
+const EXPENSE_CATEGORIES = [
+  { value: 'nhap_hang', label: 'Nhập vật tư',            color: '#3B82F6' },
+  { value: 'van_chuyen', label: 'Vận chuyển/Xăng xe',   color: '#F59E0B' },
+  { value: 'nhan_cong', label: 'Nhân công/Bốc vác',       color: '#10B981' },
+  { value: 'dien_nuoc', label: 'Điện nước/Mặt bằng',     color: '#EF4444' },
+  { value: 'khac', label: 'Chi phí khác',                  color: '#6B7280' },
+];
+
+export { API_CONFIG, AUTH_CONFIG, APP_CONFIG, EXPENSE_CATEGORIES };
+

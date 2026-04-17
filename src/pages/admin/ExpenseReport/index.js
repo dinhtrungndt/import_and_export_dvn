@@ -2,16 +2,8 @@ import { useEffect, useState } from 'react';
 import { FaChartBar, FaChartPie, FaSpinner } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuth } from '../../../contexts/AuthContext';
+import { EXPENSE_CATEGORIES } from '../../../config';
 import { fetchExpenseReport } from '../../../stores/redux/actions/adminActions.js';
-
-// Danh mục chuẩn cho Báo cáo VLXD
-const EXPENSE_CATEGORIES = [
-  { value: 'nhap_hang', label: 'Nhập vật tư', color: '#3B82F6' },
-  { value: 'van_chuyen', label: 'Vận chuyển/Xăng xe', color: '#F59E0B' },
-  { value: 'nhan_cong', label: 'Nhân công/Bốc vác', color: '#10B981' },
-  { value: 'dien_nuoc', label: 'Điện nước/Mặt bằng', color: '#EF4444' },
-  { value: 'khac', label: 'Khác', color: '#6B7280' }
-];
 
 const ExpenseReport = () => {
   const { isAuthenticated, user } = useAuth();

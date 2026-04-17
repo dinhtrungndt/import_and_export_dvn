@@ -14,36 +14,11 @@ import {
   FaSignOutAlt,
   FaTags,
   FaTimes,
-  FaUser,
+  FaUser
 } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-
-const PRODUCTS_SUBMENU = [
-  { label: 'Sắt Thép Xây Dựng', href: '/products?category=sat-thep' },
-  { label: 'Cát Đá Đóng Bao', href: '/products?category=cat-da-dong-bao' },
-  { label: 'Cát Xây Dựng', href: '/products?category=cat-xay-dung' },
-  { label: 'Gạch Tuynel', href: '/products?category=gach-tuynel' },
-  { label: 'Đá Xây Dựng', href: '/products?category=da-xay-dung' },
-  { label: 'Xi Măng', href: '/products?category=xi-mang' },
-  { label: 'Dây Kẽm & Đinh', href: '/products?category=day-kem-dinh' },
-  { label: 'Lưới Thép', href: '/products?category=luoi-thep' },
-  { label: 'Thép Hình', href: '/products?category=thep-hinh' },
-  { label: 'Thép Hộp', href: '/products?category=thep-hop' },
-];
-
-const PRICE_SUBMENU = [
-  { label: 'Đá mi bụi', href: '/products?search=Đá mi bụi' },
-  { label: 'Đá mi sàng', href: '/products?search=Đá mi sàng' },
-  { label: 'Đá 0x4', href: '/products?search=Đá 0x4' },
-  { label: 'Đá 1×2', href: '/products?search=Đá 1x2' },
-  { label: 'Cát san lấp', href: '/products?search=Cát san lấp' },
-  { label: 'Cát xây tô', href: '/products?search=Cát xây tô' },
-  { label: 'Cát bê tông', href: '/products?search=Cát bê tông' },
-  { label: 'Xi măng Thăng Long', href: '/products?search=Xi măng Thăng Long' },
-  { label: 'Xi măng Nghi Sơn', href: '/products?search=Xi măng Nghi Sơn' },
-  { label: 'Xà bần sạch', href: '/products?search=Xà bần sạch' },
-];
+import { PRICE_SUBMENU_MOBILE, PRODUCTS_SUBMENU } from '../../data/navigation';
 
 /* ── Accordion Item ── */
 const AccordionItem = ({ icon: Icon, label, children, isChildActive, onClose, href }) => {
@@ -52,9 +27,8 @@ const AccordionItem = ({ icon: Icon, label, children, isChildActive, onClose, hr
   return (
     <div className="border-b border-gray-100">
       <div
-        className={`flex items-center justify-between w-full text-sm font-semibold transition-colors ${
-          isChildActive ? 'text-blue-700 bg-blue-50' : 'text-gray-700 hover:bg-gray-50'
-        }`}
+        className={`flex items-center justify-between w-full text-sm font-semibold transition-colors ${isChildActive ? 'text-blue-700 bg-blue-50' : 'text-gray-700 hover:bg-gray-50'
+          }`}
       >
         <Link
           to={href}
@@ -97,11 +71,10 @@ const NavItem = ({ icon: Icon, label, href, isActive, onClose }) => (
   <Link
     to={href}
     onClick={onClose}
-    className={`flex items-center gap-3 px-5 py-3.5 text-sm font-semibold border-b border-gray-100 transition-colors ${
-      isActive
+    className={`flex items-center gap-3 px-5 py-3.5 text-sm font-semibold border-b border-gray-100 transition-colors ${isActive
         ? 'text-blue-700 bg-blue-50 border-l-4 border-l-blue-600'
         : 'text-gray-700 hover:bg-gray-50 border-l-4 border-l-transparent'
-    }`}
+      }`}
   >
     <Icon className={isActive ? 'text-blue-600' : 'text-gray-400'} />
     {label}
@@ -204,7 +177,7 @@ export const SideBar = ({ toggleMenu, currentPath }) => {
             onClose={toggleMenu}
             href="/price"
           >
-            {PRICE_SUBMENU}
+            {PRICE_SUBMENU_MOBILE}
           </AccordionItem>
 
           <NavItem icon={FaHandshake} label="Dịch Vụ" href="/services" isActive={isActive('/services')} onClose={toggleMenu} />

@@ -3,16 +3,8 @@ import { FaFileInvoiceDollar, FaFilter, FaInfoCircle, FaPlus, FaSave, FaSpinner,
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../contexts/AuthContext';
+import { EXPENSE_CATEGORIES } from '../../../config';
 import { createExpense, fetchExpenses, fetchHiddenExpenses, updateExpense } from '../../../stores/redux/actions/adminActions.js';
-
-// Danh mục chi phí chuẩn cho cửa hàng VLXD
-const EXPENSE_CATEGORIES = [
-  { value: 'nhap_hang', label: 'Nhập vật tư' },
-  { value: 'van_chuyen', label: 'Vận chuyển/Xăng xe' },
-  { value: 'nhan_cong', label: 'Nhân công/Bốc vác' },
-  { value: 'dien_nuoc', label: 'Điện nước/Mặt bằng' },
-  { value: 'khac', label: 'Chi phí khác' },
-];
 
 const formatDateToYYYYMMDD = (date) => {
   if (!date) return '';
