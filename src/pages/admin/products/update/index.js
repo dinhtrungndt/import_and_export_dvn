@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
-import { FaBoxOpen, FaCamera, FaDollarSign, FaLayerGroup, FaPencilAlt, FaSave, FaSpinner, FaTag, FaTimes, FaTrash, FaUpload } from 'react-icons/fa';
 import JoditEditor from 'jodit-react';
+import { useEffect, useState } from 'react';
+import { FaBoxOpen, FaCamera, FaDollarSign, FaLayerGroup, FaPencilAlt, FaSave, FaSpinner, FaTag, FaTimes, FaTrash, FaUpload } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { APP_CONFIG } from '../../../../config';
 import { fetchProductById, updateProduct } from '../../../../stores/redux/actions/adminActions.js';
@@ -41,7 +41,7 @@ const EditProductDialog = ({ productId, onClose, onProductUpdated }) => {
     if (productDetails) {
       setFormData({
         name: productDetails.name || '',
-        category: productDetails.category || 'cat_san_lap',
+        category: productDetails.category || 'cat-san-lap',
         sub_category: productDetails.sub_category || '',
         unit: productDetails.unit || 'Khối',
         importPrice: productDetails.import_price || '',
@@ -334,7 +334,7 @@ const EditProductDialog = ({ productId, onClose, onProductUpdated }) => {
                     askBeforePasteFromWord: false,
                     askBeforePasteHTML: false,
                     defaultActionOnPaste: 'insert_as_html',
-                    buttons: ['source', '|', 'bold', 'italic', 'underline', 'strikethrough', '|', 'ul', 'ol', '|', 'outdent', 'indent',  '|', 'font', 'fontsize', 'brush', 'paragraph', '|', 'image', 'table', 'link', '|', 'align', 'undo', 'redo', '|', 'hr', 'eraser', 'fullsize']
+                    buttons: ['source', '|', 'bold', 'italic', 'underline', 'strikethrough', '|', 'ul', 'ol', '|', 'outdent', 'indent', '|', 'font', 'fontsize', 'brush', 'paragraph', '|', 'image', 'table', 'link', '|', 'align', 'undo', 'redo', '|', 'hr', 'eraser', 'fullsize']
                   }}
                   tabIndex={1}
                   onBlur={newContent => handleInputChange({ target: { name: 'description', value: newContent } })}

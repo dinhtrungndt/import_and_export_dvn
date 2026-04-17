@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { Footer } from '../footer/index.js';
 import { HeaderPage } from '../header';
+import FloatingContactWidget from '../FloatingContact';
 
 const MainLayout = () => {
   return (
@@ -10,6 +11,7 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <FloatingContactWidget />
     </div>
   );
 };
