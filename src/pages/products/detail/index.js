@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaArrowLeft, FaCheckCircle, FaMinus, FaPhoneAlt, FaPlus, FaShieldAlt, FaShoppingCart, FaTruck, FaComments, FaInfoCircle } from 'react-icons/fa';
+import { FaArrowLeft, FaComments, FaInfoCircle, FaMinus, FaPhoneAlt, FaPlus, FaShieldAlt, FaShoppingCart, FaTruck } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -21,25 +21,26 @@ const ProductDetailPage = () => {
   const [ordering, setOrdering] = useState(false);
   const [contactPhone, setContactPhone] = useState('');
   const [activeTab, setActiveTab] = useState('info');
+  const [isFetching, setIsFetching] = useState(true);
 
   // Lấy dữ liệu từ Redux
   const { productDetails: productDetail, loading, products } = useSelector((state) => state.adminReducer || {});
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchProductById(id));
-      setQuantity(1); // Reset quantity when product changes
+      setIsFetching(true);
+      dispatch(fetchProductById(id)).finally(() => setIsFetching(false));
+      setQuantity(1);
     }
   }, [id, dispatch]);
 
-  // Lấy thêm sản phẩm cùng danh mục nếu danh sách products rỗng
   useEffect(() => {
     if (products?.length === 0) {
       dispatch(fetchProducts());
     }
   }, [products?.length, dispatch]);
 
-  if (loading) {
+  if (loading || isFetching) {
     return (
       <div className="min-h-[70vh] bg-[#F8FAFC] flex justify-center items-center">
         <div className="relative flex items-center justify-center">
@@ -276,7 +277,7 @@ const ProductDetailPage = () => {
           {/* Cột Nội dung Tabs */}
           <div className="w-full lg:w-2/3">
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100/50 ring-1 ring-slate-900/5 overflow-hidden">
-              
+
               {/* Header Tabs */}
               <div className="flex border-b border-slate-200">
                 <button
@@ -323,13 +324,13 @@ const ProductDetailPage = () => {
                       <div className="flex gap-3 relative">
                         <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs shrink-0">KH</div>
                         <div className="flex-1">
-                           <textarea
-                             placeholder="Bạn có câu hỏi gì về sản phẩm này?"
-                             className="w-full bg-transparent text-sm focus:outline-none resize-none min-h-[60px]"
-                           ></textarea>
-                           <div className="flex justify-end mt-2">
-                             <button className="bg-slate-900 text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors">Bình luận</button>
-                           </div>
+                          <textarea
+                            placeholder="Bạn có câu hỏi gì về sản phẩm này?"
+                            className="w-full bg-transparent text-sm focus:outline-none resize-none min-h-[60px]"
+                          ></textarea>
+                          <div className="flex justify-end mt-2">
+                            <button className="bg-slate-900 text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors">Bình luận</button>
+                          </div>
                         </div>
                       </div>
                     </div>
