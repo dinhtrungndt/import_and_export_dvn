@@ -208,6 +208,10 @@ const ProductDetailPage = () => {
                   <div className="flex-1 flex gap-2">
                     <button
                       onClick={() => {
+                        if (!isAuthenticated) {
+                          navigate('/login', { state: { from: `/product/${id}` } });
+                          return;
+                        }
                         addToCart(productDetail, quantity);
                         toast.success('Đã thêm sản phẩm vào giỏ hàng!');
                       }}
