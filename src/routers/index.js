@@ -33,6 +33,7 @@ import PrivateRoute from '../components/route/PrivateRoute.js';
 import { useAuth } from '../contexts/AuthContext.js';
 import CostsMana from '../pages/admin/costsMana/index.js';
 import ExpenseReport from '../pages/admin/ExpenseReport/index.js';
+import OrderManagement from '../pages/admin/orders/index.js';
 
 // Điều hướng dựa trên Role từ Backend (admin, manager, staff, customer)
 const RoleBasedRedirect = () => {
@@ -111,6 +112,7 @@ export const Routers = () => {
             <Route path="add-products" element={<AddProducts />} />
             <Route path="expense-report" element={<ExpenseReport />} />
             <Route path="costs-mana" element={<CostsMana />} />
+            <Route path="orders" element={<OrderManagement />} />
             <Route path="edit-product/:id" element={<EditProductPage />} />
             <Route path="product/:id" element={<ProductDetailDialogAdmin />} />
           </Route>

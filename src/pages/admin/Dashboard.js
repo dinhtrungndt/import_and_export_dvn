@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaBoxes, FaEyeSlash, FaMoneyBillWave, FaPercent, FaReceipt, FaShoppingCart, FaWarehouse } from 'react-icons/fa';
+import { FaBoxes, FaEyeSlash, FaMoneyBillWave, FaPercent, FaReceipt, FaShoppingBag, FaShoppingCart, FaWarehouse } from 'react-icons/fa';
 import { FaMoneyBillTrendUp } from 'react-icons/fa6';
 import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
@@ -223,6 +223,13 @@ const Dashboard = () => {
               <div>
                 <h4 className="font-medium text-gray-900 text-sm">Báo cáo tồn kho</h4>
                 <p className="text-xs text-gray-500 mt-0.5">Theo dõi số lượng vật tư</p>
+              </div>
+            </Link>
+            <Link to="/admin/orders" className="flex items-center p-4 rounded-lg border border-gray-100 hover:border-indigo-300 hover:bg-indigo-50/50 transition-colors">
+              <div className="bg-indigo-100 p-2.5 rounded-lg text-indigo-600 mr-3"><FaShoppingBag className="h-5 w-5" /></div>
+              <div>
+                <h4 className="font-medium text-gray-900 text-sm">Quản lý đơn hàng</h4>
+                <p className="text-xs text-gray-500 mt-0.5">Duyệt & theo dõi đơn</p>
               </div>
             </Link>
             <Link to="/admin/export" className="flex items-center p-4 rounded-lg border border-gray-100 hover:border-green-300 hover:bg-green-50/50 transition-colors">

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import {
-  FaBars, FaBoxes, FaChartLine, FaClipboardList, FaSignOutAlt, FaTachometerAlt, FaTimes, FaTools, FaUser
+  FaBars, FaBoxes, FaChartLine, FaClipboardList, FaShoppingBag, FaSignOutAlt, FaTachometerAlt, FaTimes, FaTools, FaUser
 } from 'react-icons/fa';
 import { FaMoneyBillTrendUp } from 'react-icons/fa6';
 import { GiReceiveMoney } from 'react-icons/gi';
@@ -92,6 +92,14 @@ const AdminLayout = () => {
               >
                 <FaChartLine className="mr-3 h-4 w-4" />
                 Báo Cáo Doanh Thu
+              </Link>
+              <Link
+                to="/admin/orders"
+                className={`flex items-center px-4 py-2 text-sm font-medium rounded-md ${isActive('/admin/orders') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'
+                  }`}
+              >
+                <FaShoppingBag className="mr-3 h-4 w-4" />
+                Quản Lý Đơn Hàng
               </Link>
               <Link
                 to="/admin/costs-mana"
@@ -187,6 +195,13 @@ const AdminLayout = () => {
                   <FaChartLine className="mr-3 h-4 w-4" /> Báo Cáo Doanh Thu
                 </Link>
                 <Link
+                  to="/admin/orders"
+                  onClick={toggleSidebar}
+                  className={`flex items-center px-4 py-2 text-sm font-medium rounded-md ${isActive('/admin/orders') ? 'bg-blue-600 text-white' : 'text-gray-300'}`}
+                >
+                  <FaShoppingBag className="mr-3 h-4 w-4" /> Quản Lý Đơn Hàng
+                </Link>
+                <Link
                   to="/admin/costs-mana"
                   onClick={toggleSidebar}
                   className={`flex items-center px-4 py-2 text-sm font-medium rounded-md ${isActive('/admin/costs-mana') ? 'bg-blue-600 text-white' : 'text-gray-300'}`}
@@ -211,9 +226,10 @@ const AdminLayout = () => {
           <div className="flex-1 px-4 flex justify-between items-center">
             <h1 className="text-lg font-semibold text-gray-800">
               {location.pathname === '/admin' ? 'Tổng quan Hệ Thống' :
-                location.pathname.includes('inventory') ? 'Quản Lý Tồn Kho' :
-                  location.pathname.includes('list-products') ? 'Quản Lý Vật Liệu' :
-                    location.pathname.includes('costs-mana') ? 'Quản Lý Thu Chi' : 'Báo Cáo'}
+                location.pathname.includes('orders') ? 'Quản Lý Đơn Hàng' :
+                  location.pathname.includes('inventory') ? 'Quản Lý Tồn Kho' :
+                    location.pathname.includes('list-products') ? 'Quản Lý Vật Liệu' :
+                      location.pathname.includes('costs-mana') ? 'Quản Lý Thu Chi' : 'Báo Cáo'}
             </h1>
             <div className="ml-4 flex items-center md:ml-6">
               <div className="relative" ref={profileRef}>
