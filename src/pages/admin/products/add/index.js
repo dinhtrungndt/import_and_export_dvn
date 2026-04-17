@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { FaBoxOpen, FaCamera, FaDollarSign, FaLayerGroup, FaPencilAlt, FaSave, FaSpinner, FaTag, FaTimes, FaUpload } from 'react-icons/fa';
+import JoditEditor from 'jodit-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { APP_CONFIG } from '../../../../config';
@@ -275,15 +276,23 @@ const AddProducts = () => {
               <label htmlFor="description" className="flex items-center text-sm font-medium text-gray-700 mb-2">
                 <FaPencilAlt className="mr-2 text-blue-500" /> Ghi chú / Mô tả
               </label>
-              <textarea
-                id="description"
-                name="description"
-                rows="3"
-                value={formData.description}
-                onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-lg py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                placeholder="Mô tả chất lượng, nguồn gốc xuất xứ..."
-              />
+              <div className="bg-white rounded-lg pb-4">
+                <JoditEditor
+                  value={formData.description}
+                  config={{
+                    readonly: false,
+                    placeholder: 'Mô tả chất lượng, nguồn gốc xuất xứ, cấu trúc bảng...',
+                    height: 350,
+                    toolbarAdaptive: false,
+                    askBeforePasteFromWord: false,
+                    askBeforePasteHTML: false,
+                    defaultActionOnPaste: 'insert_as_html',
+                    buttons: ['source', '|', 'bold', 'italic', 'underline', 'strikethrough', '|', 'ul', 'ol', '|', 'outdent', 'indent',  '|', 'font', 'fontsize', 'brush', 'paragraph', '|', 'image', 'table', 'link', '|', 'align', 'undo', 'redo', '|', 'hr', 'eraser', 'fullsize']
+                  }}
+                  tabIndex={1}
+                  onBlur={newContent => handleInputChange({ target: { name: 'description', value: newContent } })}
+                />
+              </div>
             </div>
 
             <div className="form-group">

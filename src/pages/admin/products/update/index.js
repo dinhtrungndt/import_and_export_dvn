@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { FaBoxOpen, FaCamera, FaDollarSign, FaLayerGroup, FaPencilAlt, FaSave, FaSpinner, FaTag, FaTimes, FaTrash, FaUpload } from 'react-icons/fa';
+import JoditEditor from 'jodit-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { APP_CONFIG } from '../../../../config';
 import { fetchProductById, updateProduct } from '../../../../stores/redux/actions/adminActions.js';
@@ -318,18 +319,27 @@ const EditProductDialog = ({ productId, onClose, onProductUpdated }) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group pb-10">
               <label htmlFor="description" className="flex items-center text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
                 <FaPencilAlt className="mr-1.5 text-blue-500 text-xs" /> Ghi chú
               </label>
-              <textarea
-                id="description"
-                name="description"
-                rows="3"
-                value={formData.description}
-                onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-lg py-1.5 sm:py-2 px-2 sm:px-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              />
+              <div className="bg-white rounded-lg">
+                <JoditEditor
+                  value={formData.description}
+                  config={{
+                    readonly: false,
+                    placeholder: 'Mô tả chất lượng, nguồn gốc xuất xứ, cấu trúc bảng...',
+                    height: 350,
+                    toolbarAdaptive: false,
+                    askBeforePasteFromWord: false,
+                    askBeforePasteHTML: false,
+                    defaultActionOnPaste: 'insert_as_html',
+                    buttons: ['source', '|', 'bold', 'italic', 'underline', 'strikethrough', '|', 'ul', 'ol', '|', 'outdent', 'indent',  '|', 'font', 'fontsize', 'brush', 'paragraph', '|', 'image', 'table', 'link', '|', 'align', 'undo', 'redo', '|', 'hr', 'eraser', 'fullsize']
+                  }}
+                  tabIndex={1}
+                  onBlur={newContent => handleInputChange({ target: { name: 'description', value: newContent } })}
+                />
+              </div>
             </div>
 
             <div className="form-group">

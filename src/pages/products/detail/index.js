@@ -294,7 +294,7 @@ const ProductDetailPage = () => {
                 {activeTab === 'info' && (
                   <div className="prose prose-sm md:prose-base max-w-none text-slate-600 leading-relaxed text-[13px] md:text-sm">
                     {productDetail.description ? (
-                      <p className="whitespace-pre-wrap">{productDetail.description}</p>
+                      <div className="whitespace-pre-wrap quill-content" dangerouslySetInnerHTML={{ __html: productDetail.description }} />
                     ) : (
                       <>
                         <h4 className="font-bold text-slate-800 mb-2">Mô tả cơ bản:</h4>
