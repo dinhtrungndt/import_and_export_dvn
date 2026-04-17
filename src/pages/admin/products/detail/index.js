@@ -51,17 +51,17 @@ const ProductDetailDialogAdmin = ({ productId, onClose, onProductHidden }) => {
   };
 
   return (
-    <div className="fixed inset-0 overflow-y-auto z-40 flex items-center justify-center">
+    <div className="fixed inset-0 z-40 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black bg-opacity-60 transition-opacity" onClick={onClose}></div>
 
-      <div className="relative bg-white rounded-xl text-left overflow-hidden shadow-2xl transform transition-all w-full max-w-sm mx-auto z-50">
+      <div className="relative bg-white rounded-xl text-left shadow-2xl transform transition-all w-full max-w-sm mx-auto z-50 flex flex-col max-h-[90vh]">
         <div className="absolute top-2 right-2 z-50">
           <button type="button" className="bg-white/80 rounded-full w-8 h-8 flex items-center justify-center text-gray-700 hover:bg-gray-200" onClick={onClose}>
             <FaTimes className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="px-5 pt-5 pb-6">
+        <div className="px-5 pt-5 pb-6 overflow-y-auto flex-1">
           {productDetailsLoading ? (
             <div className="flex justify-center items-center py-10">
               <FaSpinner className="animate-spin text-blue-600 h-8 w-8" />
@@ -114,9 +114,16 @@ const ProductDetailDialogAdmin = ({ productId, onClose, onProductHidden }) => {
 
                 <div className="mb-5">
                   <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Mô tả chi tiết</h4>
-                  <p className="text-sm text-gray-700 bg-white border border-gray-100 p-3 rounded-lg leading-relaxed shadow-sm min-h-[60px]">
-                    {productDetails.description || 'Không có mô tả cho vật liệu này.'}
-                  </p>
+                  {productDetails.description ? (
+                    <div
+                      className="text-sm text-gray-700 bg-white border border-gray-100 p-3 rounded-lg leading-relaxed shadow-sm min-h-[60px] prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: productDetails.description }}
+                    />
+                  ) : (
+                    <p className="text-sm text-gray-500 bg-white border border-gray-100 p-3 rounded-lg leading-relaxed shadow-sm min-h-[60px] italic">
+                      Không có mô tả cho vật liệu này.
+                    </p>
+                  )}
                 </div>
               </div>
 
