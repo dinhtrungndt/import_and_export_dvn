@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaBoxes, FaChartBar, FaEyeSlash, FaMoneyBillWave, FaPercent, FaReceipt, FaShoppingCart, FaWarehouse } from 'react-icons/fa';
+import { FaBoxes, FaEyeSlash, FaMoneyBillWave, FaPercent, FaReceipt, FaShoppingCart, FaWarehouse } from 'react-icons/fa';
 import { FaMoneyBillTrendUp } from 'react-icons/fa6';
 import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';

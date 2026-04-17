@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   FaBars, FaBoxes, FaChartLine, FaClipboardList, FaSignOutAlt, FaTachometerAlt, FaTimes, FaTools, FaUser
 } from 'react-icons/fa';
@@ -11,9 +11,21 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const profileRef = useRef(null);
+
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+
+  useEffect(() => {
+    const listener = (e) => {
+      if (!profileRef.current || profileRef.current.contains(e.target)) return;
+      setIsProfileDropdownOpen(false);
+    };
+    document.addEventListener('mousedown', listener);
+    return () => document.removeEventListener('mousedown', listener);
+  }, [profileRef]);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -204,9 +216,48 @@ const AdminLayout = () => {
                     location.pathname.includes('costs-mana') ? 'Quản Lý Thu Chi' : 'Báo Cáo'}
             </h1>
             <div className="ml-4 flex items-center md:ml-6">
-              <div className="flex items-center bg-gray-100 rounded-full px-3 py-1">
-                <FaUser className="h-4 w-4 text-blue-600 mr-2" />
-                <span className="text-sm font-medium text-gray-700">{user?.name || 'Quản trị viên'}</span>
+              <div className="relative" ref={profileRef}>
+                <button 
+                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                  className="flex items-center bg-gray-100 hover:bg-gray-200 transition-colors rounded-full px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                >
+                  <FaUser className="h-4 w-4 text-blue-600 mr-2" />
+                  <span className="text-sm font-medium text-gray-700 mr-1">{user?.name || 'Quản trị viên'}</span>
+                  <svg className={`w-4 h-4 text-gray-500 transition-transform ${isProfileDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+
+                {isProfileDropdownOpen && (
+                  <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-lg py-1 z-50 border border-gray-100 origin-top-right transition-all">
+                    <div className="px-4 py-3 border-b border-gray-100 bg-blue-50/50 rounded-t-xl text-left">
+                      <p className="text-sm leading-5 font-bold text-gray-900 truncate">{user?.name || 'Quản trị viên'}</p>
+                      <p className="text-xs leading-5 font-medium text-gray-500 truncate">{user?.email || (user?.username ? `@${user.username}` : 'admin@dvn.com')}</p>
+                    </div>
+                    <div className="py-1">
+                      <Link
+                        to="/account"
+                        className="group flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        <FaUser className="mr-3 h-4 w-4 text-gray-400 group-hover:text-blue-500" /> Hồ sơ cá nhân
+                      </Link>
+                      <Link
+                        to="/"
+                        className="group flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        <IoReturnUpBack className="mr-3 h-4 w-4 text-gray-400 group-hover:text-blue-500" /> Quay lại Website
+                      </Link>
+                    </div>
+                    <div className="border-t border-gray-100 py-1">
+                      <button
+                        onClick={handleLogout}
+                        className="group flex w-full items-center px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        <FaSignOutAlt className="mr-3 h-4 w-4 text-red-500 group-hover:text-red-600" /> Đăng xuất
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
