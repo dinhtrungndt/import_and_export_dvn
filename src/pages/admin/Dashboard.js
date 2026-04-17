@@ -258,7 +258,7 @@ const Dashboard = () => {
             <ul className="divide-y divide-gray-100">
               {dashboard.topProducts && dashboard.topProducts.length > 0 ? (
                 dashboard.topProducts.map((product, index) => (
-                  <li key={product.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
+                  <li key={product._id} className="p-4 flex items-center justify-between hover:bg-gray-50">
                     <div className="flex items-center min-w-0 mr-3">
                       <div className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center mr-3 text-sm font-bold
                         ${index === 0 ? 'bg-amber-100 text-amber-600' : index === 1 ? 'bg-slate-100 text-slate-600' : index === 2 ? 'bg-orange-50 text-orange-600' : 'bg-gray-50 text-gray-400'}`}>
