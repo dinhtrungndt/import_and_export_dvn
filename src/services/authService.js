@@ -91,7 +91,7 @@ export const getAccessToken = () => {
   const tokenStr = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
   if (!tokenStr) return null;
 
-  if (tokenStr.startsWith('eyJ')) return tokenStr; // Fallback token cũ
+  if (tokenStr.startsWith('eyJ')) return tokenStr;
 
   try {
     const bytes = CryptoJS.AES.decrypt(tokenStr, SECRET_KEY);

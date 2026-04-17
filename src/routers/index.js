@@ -63,22 +63,30 @@ export const Routers = () => {
 
         {/* Customer Routes with MainLayout */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<PrivateRoute />}>
-            <Route index element={<HomePage />} />
+          {/* Public Routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+
+          {/* Posts routes (Public) */}
+          <Route path="/bao-gia">
+            <Route index element={<PostsPage />} />
+            <Route path=":slug" element={<PostDetailPage />} />
+          </Route>
+          
+          <Route path="/tin-tuc">
+            <Route index element={<PostsPage />} />
+            <Route path=":slug" element={<PostDetailPage />} />
+          </Route>
+          
+          <Route path="/dich-vu">
+            <Route index element={<PostsPage />} />
+            <Route path=":slug" element={<PostDetailPage />} />
           </Route>
 
-          <Route path="/about" element={<PrivateRoute />}>
-            <Route index element={<AboutPage />} />
-          </Route>
-
-          <Route path="/products" element={<PrivateRoute />}>
-            <Route index element={<ProductsPage />} />
-          </Route>
-
-          <Route path="/product/:id" element={<PrivateRoute />}>
-            <Route index element={<ProductDetailPage />} />
-          </Route>
-
+          {/* Private Routes (Require Login) */}
           <Route path="/order-history" element={<PrivateRoute />}>
             <Route index element={<OrderHistoryPage />} />
           </Route>
@@ -89,26 +97,6 @@ export const Routers = () => {
 
           <Route path="/checkout" element={<PrivateRoute />}>
             <Route index element={<CheckoutPage />} />
-          </Route>
-
-          <Route path="/contact" element={<PrivateRoute />}>
-            <Route index element={<ContactPage />} />
-          </Route>
-
-          {/* Posts routes */}
-          <Route path="/bao-gia" element={<PrivateRoute />}>
-            <Route index element={<PostsPage />} />
-            <Route path=":slug" element={<PostDetailPage />} />
-          </Route>
-          
-          <Route path="/tin-tuc" element={<PrivateRoute />}>
-            <Route index element={<PostsPage />} />
-            <Route path=":slug" element={<PostDetailPage />} />
-          </Route>
-          
-          <Route path="/dich-vu" element={<PrivateRoute />}>
-            <Route index element={<PostsPage />} />
-            <Route path=":slug" element={<PostDetailPage />} />
           </Route>
         </Route>
 

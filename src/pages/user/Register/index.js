@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaEnvelope, FaLock, FaPhone, FaUser, FaArrowRight, FaHardHat } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaPhone, FaUser, FaArrowRight, FaHardHat, FaArrowLeft } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { register } from '../../../services/authService';
@@ -48,8 +48,11 @@ const Register = () => {
             <span className="text-3xl font-extrabold tracking-tight text-blue-900">VLXD DVN</span>
           </div>
 
-          <div className="mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 tracking-tight text-center lg:text-left">Tạo tài khoản mới</h1>
+          <div className="mb-8 text-center lg:text-left">
+            <Link to="/" className="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-blue-600 transition-colors mb-6">
+              <FaArrowLeft className="mr-2" /> Về trang chủ
+            </Link>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 tracking-tight">Tạo tài khoản mới</h1>
             <p className="text-gray-500 font-medium text-center lg:text-left">Đăng ký để tận hưởng các dịch vụ tốt nhất từ DVN</p>
           </div>
 

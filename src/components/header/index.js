@@ -296,7 +296,7 @@ export const HeaderPage = () => {
   const { user, isAuthenticated, logout, hasRole } = useAuth();
 
   // Cart Hook
-  const { cartItems, cartCount, cartTotal, removeFromCart, updateQuantity } = useCart();
+  const { cartItems, cartCount, cartTotal, removeFromCart, updateQuantity, clearCart } = useCart();
 
   const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 

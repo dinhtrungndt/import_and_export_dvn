@@ -197,8 +197,8 @@ const AdminProductsPage = () => {
           </form>
 
           <div className="flex items-center gap-3 w-full md:w-auto">
-            <button 
-              onClick={() => setShowFilters(!showFilters)} 
+            <button
+              onClick={() => setShowFilters(!showFilters)}
               className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border transition-all text-sm font-medium ${showFilters ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'}`}
             >
               <FaFilter /> {showFilters ? 'Ẩn bộ lọc' : 'Lọc & Sắp xếp'}
@@ -210,9 +210,9 @@ const AdminProductsPage = () => {
               )}
             </button>
             {(searchTerm || selectedCategory !== 'all' || sortField !== 'createdAt' || sortOrder !== 'desc') && (
-               <button onClick={resetFilters} className="text-sm font-medium text-gray-500 hover:text-red-500 transition-colors px-2">
-                 Xóa lọc
-               </button>
+              <button onClick={resetFilters} className="text-sm font-medium text-gray-500 hover:text-red-500 transition-colors px-2">
+                Xóa lọc
+              </button>
             )}
           </div>
         </div>
@@ -250,9 +250,9 @@ const AdminProductsPage = () => {
                   { field: 'price', label: 'Giá bán' },
                   { field: 'stock', label: 'Tồn kho' }
                 ].map(item => (
-                  <button 
+                  <button
                     key={item.field}
-                    onClick={() => handleSort(item.field)} 
+                    onClick={() => handleSort(item.field)}
                     className={`px-3 py-2 text-sm rounded-lg flex items-center justify-between transition-all ${sortField === item.field ? 'bg-blue-50 text-blue-700 border border-blue-200 font-medium' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
                   >
                     {item.label}
@@ -289,7 +289,7 @@ const AdminProductsPage = () => {
             <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
               {currentItems.map((product) => (
                 <div key={product.id} onClick={(e) => handleEditProduct(product.id, e)} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-visible cursor-pointer hover:shadow-lg transition-all duration-300 group flex flex-col relative">
-                  
+
                   {/* Image Section */}
                   <div className="relative aspect-[4/3] overflow-hidden bg-gray-100 rounded-t-2xl">
                     <img
@@ -299,7 +299,7 @@ const AdminProductsPage = () => {
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    
+
                     {/* Status badges */}
                     <div className="absolute top-3 left-3 flex flex-col gap-1.5">
                       {product.stock <= 0 ? (
@@ -307,7 +307,7 @@ const AdminProductsPage = () => {
                       ) : product.stock < 10 ? (
                         <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-400 rounded-md shadow-sm">Sắp hết ({product.stock})</span>
                       ) : (
-                         <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-green-800 bg-green-400 rounded-md shadow-sm">Sẵn sàng</span>
+                        <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-green-800 bg-green-400 rounded-md shadow-sm">Sẵn sàng</span>
                       )}
                     </div>
 
@@ -339,7 +339,7 @@ const AdminProductsPage = () => {
                       {APP_CONFIG.PRODUCT_CATEGORIES.find((c) => c.value === product.category)?.label || product.category}
                     </span>
                     <h3 className="text-sm md:text-base font-bold text-gray-900 leading-snug line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors">{product.name}</h3>
-                    
+
                     <div className="mt-auto pt-2 border-t border-gray-50 flex items-end justify-between">
                       <div>
                         <p className="text-[10px] text-gray-500 font-medium mb-0.5">GIÁ BÁN</p>
@@ -358,25 +358,25 @@ const AdminProductsPage = () => {
               <span className="text-sm font-medium text-gray-500">
                 Hiển thị <span className="text-gray-900 font-bold">{indexOfFirstItem + 1}</span> - <span className="text-gray-900 font-bold">{Math.min(indexOfLastItem, products.length)}</span> trong số <span className="text-gray-900 font-bold">{products.length}</span> vật liệu
               </span>
-              
+
               <div className="flex items-center gap-1.5 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
-                <button 
-                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))} 
-                  disabled={currentPage === 1} 
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
                   className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed hidden sm:block' : 'text-gray-700 bg-white shadow-sm hover:text-blue-600 hover:shadow'}`}
                 >
                   Trước
                 </button>
-                
+
                 <div className="flex items-center justify-center min-w-[4rem] px-2 bg-white rounded-lg py-1.5 shadow-sm border border-gray-100 mx-1">
                   <span className="text-sm font-bold text-blue-600">{currentPage}</span>
                   <span className="text-sm text-gray-400 mx-1.5">/</span>
                   <span className="text-sm font-medium text-gray-600">{totalPages}</span>
                 </div>
 
-                <button 
-                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))} 
-                  disabled={currentPage === totalPages} 
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
                   className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${currentPage === totalPages ? 'text-gray-400 cursor-not-allowed hidden sm:block' : 'text-gray-700 bg-white shadow-sm hover:text-blue-600 hover:shadow'}`}
                 >
                   Sau

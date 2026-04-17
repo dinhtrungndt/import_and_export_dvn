@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaHardHat, FaLock, FaUser, FaArrowRight } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaHardHat, FaLock, FaUser } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { login } from '../../../services/authService';
@@ -35,7 +35,7 @@ const Login = () => {
     <div className="flex min-h-screen bg-gray-50 font-sans">
       {/* Left side - Image/Branding */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-blue-900 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541888081699-015ba6a05d66?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-40 mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-[url('https://bizweb.dktcdn.net/100/379/731/files/tim-hieu-vat-lieu-xay-dung-dac-tinh-va-da-dang-cac-loai-1.jpg?v=1706256335053')] bg-cover bg-center opacity-40 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 to-transparent"></div>
         <div className="relative z-10 flex flex-col justify-end p-12 w-full text-white">
           <div className="flex items-center gap-3 mb-6">
@@ -65,6 +65,9 @@ const Login = () => {
           </div>
 
           <div className="text-center lg:text-left mb-10">
+            <Link to="/" className="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-blue-600 transition-colors mb-6">
+              <FaArrowLeft className="mr-2" /> Về trang chủ
+            </Link>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 tracking-tight">Chào mừng trở lại!</h1>
             <p className="text-gray-500 font-medium">Vui lòng đăng nhập để tiếp tục</p>
           </div>
@@ -75,7 +78,7 @@ const Login = () => {
                 <span className="font-medium">{error}</span>
               </div>
             )}
-            
+
             <div className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="username">Tên đăng nhập</label>
@@ -83,43 +86,43 @@ const Login = () => {
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-blue-600">
                     <FaUser className="h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
                   </div>
-                  <input 
+                  <input
                     id="username"
-                    type="text" 
-                    required 
-                    className="block w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-xl text-gray-900 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all duration-200 outline-none sm:text-sm font-medium shadow-sm hover:border-gray-300" 
-                    placeholder="Nhập tên đăng nhập" 
-                    value={username} 
-                    onChange={(e) => setUsername(e.target.value)} 
+                    type="text"
+                    required
+                    className="block w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-xl text-gray-900 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all duration-200 outline-none sm:text-sm font-medium shadow-sm hover:border-gray-300"
+                    placeholder="Nhập tên đăng nhập"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-semibold text-gray-700" htmlFor="password">Mật khẩu</label>
-                  <a href="#" className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">Quên mật khẩu?</a>
-                </div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="password">Mật khẩu</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <FaLock className="h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
                   </div>
-                  <input 
+                  <input
                     id="password"
-                    type="password" 
-                    required 
-                    className="block w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-xl text-gray-900 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all duration-200 outline-none sm:text-sm font-medium shadow-sm hover:border-gray-300" 
-                    placeholder="••••••••" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
+                    type="password"
+                    required
+                    className="block w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-xl text-gray-900 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all duration-200 outline-none sm:text-sm font-medium shadow-sm hover:border-gray-300"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
+                </div>
+                <div className="flex justify-end mt-3">
+                  <a href="#" className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">Quên mật khẩu?</a>
                 </div>
               </div>
             </div>
 
-            <button 
-              type="submit" 
-              disabled={loading} 
+            <button
+              type="submit"
+              disabled={loading}
               className="w-full flex items-center justify-center gap-2 py-3.5 px-4 mt-6 text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 disabled:opacity-70 transition-all shadow-md hover:shadow-xl disabled:shadow-none"
             >
               {loading ? 'Đang xác thực...' : 'Đăng nhập vào hệ thống'}
